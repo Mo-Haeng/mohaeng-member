@@ -17,6 +17,7 @@ noArg {
 
 
 dependencies {
+    implementation(project(":mohang-member-auth"))
 
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
