@@ -18,7 +18,7 @@ class Member(
 
     // 회원가입 시 사용한 소셜 서비스와, 해당 서비스에서 제공하는 식별값
     @Embedded
-    var registrationIdentification: RegistrationIdentification,
+    var registrationId: RegistrationId,
 
     @Column(name = "email", length = 50, nullable = false)
     var email: String, // 이메일
