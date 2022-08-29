@@ -23,8 +23,8 @@ class Member(
     @Column(name = "email", length = 50, nullable = false)
     var email: String, // 이메일
 
-    @Column(nullable = false)
-    var password: String, // 비밀번호(암호화)
+    @Column(nullable = true)
+    var password: String, // 비밀번호(암호화), 소셜 로그인의 경우 존재 X
 
     @Column(nullable = false)
     var nickname: String, // 닉네임
