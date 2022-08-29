@@ -1,4 +1,4 @@
-package com.mohang.infrastructure.fixture
+package com.mohang.fixture
 
 import com.mohang.domain.Member
 import com.mohang.domain.RegistrationId

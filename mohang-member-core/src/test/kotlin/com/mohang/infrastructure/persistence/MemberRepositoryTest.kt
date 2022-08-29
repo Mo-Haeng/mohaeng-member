@@ -2,7 +2,7 @@ package com.mohang.infrastructure.persistence
 
 import com.mohang.domain.RegistrationId
 import com.mohang.domain.enums.RegistrationType.*
-import com.mohang.infrastructure.fixture.MemberFixture.notSavedMember
+import com.mohang.fixture.MemberFixture.notSavedMember
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
