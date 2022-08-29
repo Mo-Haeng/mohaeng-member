@@ -9,7 +9,7 @@ import javax.persistence.Enumerated
  * Created by ShinD on 2022/08/30.
  */
 @Embeddable
-class RegistrationId(
+data class RegistrationId(
 
     @Enumerated(EnumType.STRING)
     val registrationType: RegistrationType, // 등록 타입 - GENERAL(회원가입), KAKAO, GOOGLE, NAVER

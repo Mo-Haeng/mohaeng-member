@@ -20,6 +20,9 @@ class Member(
     @Embedded
     var registrationId: RegistrationId,
 
+    @Column(name = "name", length = 50, nullable = false)
+    var name: String, // 이름
+
     @Column(name = "email", length = 50, nullable = false)
     var email: String, // 이메일
 
@@ -35,5 +38,13 @@ class Member(
     var profileImagePath: String?, // 프로필 사진 경로 (https://~~)
 
 ) : BaseEntity() {
+
+    /**
+     * 비밀번호 암호화
+     */
+    fun passwordEncoding(passwordEncoder: MemberPasswordEncoder) {
+
+        this.password = passwordEncoder.encode(password)
+    }
 
 }
