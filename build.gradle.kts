@@ -24,7 +24,6 @@ subprojects {
 
 	apply(plugin = "kotlin")
 	apply(plugin = "kotlin-spring")
-	apply(plugin = "kotlin-jpa")
 
 	val springCloudVersion: String by project
 	val mockkVersion: String by project
@@ -51,6 +50,9 @@ subprojects {
 
 		// Annotation Processing
 		annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
+		// Logging
+		implementation("io.github.microutils:kotlin-logging:1.12.5")
 	}
 
 
