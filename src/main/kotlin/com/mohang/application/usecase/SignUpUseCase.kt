@@ -5,6 +5,7 @@ import com.mohang.application.usecase.dto.SignUpDto
 import com.mohang.domain.member.Member
 import com.mohang.domain.member.MemberPasswordEncoder
 import com.mohang.infrastructure.persistence.MemberRepository
+import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import org.springframework.transaction.support.TransactionTemplate
 
@@ -22,10 +23,14 @@ class SignUpUseCase<in T : SignUpDto> (
 
 ) {
 
+    private val log = KotlinLogging.logger {  }
+
     /**
      * 회원 가입
      */
     fun command(signUpDto: T): Long {
+
+        log.debug { "SignUpUseCase.command()" }
 
         val member = signUpDto.toEntity()
 
