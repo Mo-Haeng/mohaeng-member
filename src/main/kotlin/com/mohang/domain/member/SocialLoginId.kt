@@ -11,7 +11,7 @@ import javax.persistence.Enumerated
  * Created by ShinD on 2022/08/30.
  */
 @Embeddable
-class SocialLoginId (
+data class SocialLoginId (
 
     @Enumerated(STRING)
     val socialLoginType: SocialLoginType, // 회원가입 타입 - NONE(일반 회원가입), NAVER, GOOGLE, KAKAO
@@ -28,7 +28,7 @@ class SocialLoginId (
      *  - value: 123
      */
     @Column(name = "socail_id_value")
-    var value: String
+    val value: String
 
 ) {
 }
