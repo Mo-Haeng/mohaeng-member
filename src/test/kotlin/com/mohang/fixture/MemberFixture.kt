@@ -5,6 +5,7 @@ import com.mohang.domain.enums.Role
 import com.mohang.domain.enums.SocialLoginType
 import com.mohang.domain.member.Member
 import com.mohang.domain.member.SocialLoginId
+import com.mohang.presentation.model.SignUpRequest
 import org.springframework.test.util.ReflectionTestUtils
 import java.time.LocalDateTime
 
@@ -120,6 +121,25 @@ object MemberFixture {
             name = name,
             profileImagePath = profileImagePath,
             username = username
+        )
+
+    fun signUpRequest(
+
+        email: String = EMAIL,
+        password: String = PASSWORD,
+        nickname: String = NICKNAME,
+        name: String = NAME,
+        profileImagePath: String = PROFILE_IMAGE_PATH,
+        username: String = USERNAME,
+
+    ) =
+        SignUpRequest(
+            email = email,
+            username = username,
+            name = name,
+            password = password,
+            nickname = nickname,
+            profileImagePath = profileImagePath,
         )
 
 }
