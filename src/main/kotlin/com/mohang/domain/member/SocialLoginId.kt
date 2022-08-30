@@ -1,7 +1,10 @@
 package com.mohang.domain.member
 
 import com.mohang.domain.enums.SocialLoginType
+import javax.persistence.Column
 import javax.persistence.Embeddable
+import javax.persistence.EnumType
+import javax.persistence.EnumType.STRING
 import javax.persistence.Enumerated
 
 /**
@@ -10,7 +13,7 @@ import javax.persistence.Enumerated
 @Embeddable
 class SocialLoginId (
 
-    @Enumerated
+    @Enumerated(STRING)
     val socialLoginType: SocialLoginType, // 회원가입 타입 - NONE(일반 회원가입), NAVER, GOOGLE, KAKAO
 
     /**
@@ -24,6 +27,7 @@ class SocialLoginId (
      *  - socialLoginType: [NONE]
      *  - value: 123
      */
+    @Column(name = "socail_id_value")
     var value: String
 
 ) {

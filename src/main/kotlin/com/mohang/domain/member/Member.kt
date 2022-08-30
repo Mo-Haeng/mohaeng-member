@@ -26,7 +26,7 @@ class Member(
     var email: String, // 이메일
 
     @Column(nullable = true)
-    var password: String, // 비밀번호(암호화), 소셜 로그인의 경우 존재 X
+    var password: String?, // 비밀번호(암호화), 소셜 로그인의 경우 존재 X
 
     @Column(nullable = false)
     var nickname: String, // 닉네임
@@ -43,7 +43,7 @@ class Member(
      */
     fun passwordEncoding(passwordEncoder: MemberPasswordEncoder) {
 
-        this.password = passwordEncoder.encode(password)
+        this.password = passwordEncoder.encode(password!!)
     }
 
 }
