@@ -217,9 +217,6 @@ gradle-app.setting
 # End of https://www.toptal.com/developers/gitignore/api/macos,gradle,intellij+all,windows,java,kotlin
 
 
-# properties
 application*.yml
-!application.yml
-!application-local.yml
 
 
