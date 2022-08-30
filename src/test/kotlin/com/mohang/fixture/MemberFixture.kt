@@ -1,5 +1,6 @@
 package com.mohang.fixture
 
+import com.mohang.application.usecase.dto.BasicSignUpDto
 import com.mohang.domain.enums.Role
 import com.mohang.domain.enums.SocialLoginType
 import com.mohang.domain.member.Member
@@ -101,24 +102,24 @@ object MemberFixture {
         return member
     }
 
-//
-//    fun generalSignUpDto(
-//
-//        email: String = EMAIL,
-//        password: String = PASSWORD,
-//        nickname: String = NICKNAME,
-//        name: String = NAME,
-//        profileImagePath: String = PROFILE_IMAGE_PATH,
-//        username: String = USERNAME,
-//
-//        ) =
-//        GeneralSignUpDto(
-//            email = email,
-//            password = password,
-//            nickname = nickname,
-//            name = name,
-//            profileImagePath = profileImagePath,
-//            username = username
-//        )
+
+    fun basicSignUpDto(
+
+        email: String = EMAIL,
+        password: String = PASSWORD,
+        nickname: String = NICKNAME,
+        name: String = NAME,
+        profileImagePath: String = PROFILE_IMAGE_PATH,
+        username: String = USERNAME,
+
+        ) =
+        BasicSignUpDto(
+            email = email,
+            password = password,
+            nickname = nickname,
+            name = name,
+            profileImagePath = profileImagePath,
+            username = username
+        )
 
 }
