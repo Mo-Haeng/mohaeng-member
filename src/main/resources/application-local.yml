@@ -40,7 +40,7 @@ spring:
 
 logging:
   level:
-    root: info
+    root: debug
     org.hiberante.SQL: debug
     org.hiberante.type: debug
     org.apache.coyote.http11: debug #Http 요청정보 로그 남기기

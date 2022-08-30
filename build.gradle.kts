@@ -38,8 +38,8 @@ dependencies {
 
 	// Spring
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+	//implementation("org.springframework.boot:spring-boot-starter-security")
+	//implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 
@@ -58,6 +58,7 @@ dependencies {
 
 	testImplementation("io.mockk:mockk:1.12.1")
 	testImplementation("io.strikt:strikt-core:0.34.0")
+	testImplementation("com.ninja-squad:springmockk:3.1.1")
 
 	// Annotation Processing
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
