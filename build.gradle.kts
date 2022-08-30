@@ -1,74 +1,52 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot")
-	id("io.spring.dependency-management")
-
-	kotlin("jvm")
-	kotlin("plugin.spring")
-	kotlin("plugin.jpa")
+	id("org.springframework.boot") version "2.7.3"
+	id("io.spring.dependency-management") version "1.0.13.RELEASE"
+	kotlin("jvm") version "1.6.21"
+	kotlin("plugin.spring") version "1.6.21"
+	kotlin("plugin.jpa") version "1.6.21"
 }
 
-allprojects {
-	group = "com.mohang"
-	version = "0.0.1-SNAPSHOT"
+group = "com.mohang"
+version = "0.0.1-SNAPSHOT"
+java.sourceCompatibility = JavaVersion.VERSION_17
 
-	repositories {
-		mavenCentral()
+repositories {
+	mavenCentral()
+}
+
+extra["springCloudVersion"] = "2021.0.3"
+
+dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+	runtimeOnly("com.h2database:h2")
+	runtimeOnly("mysql:mysql-connector-java")
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.security:spring-security-test")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
 	}
 }
 
-subprojects {
-	apply(plugin = "org.springframework.boot")
-	apply(plugin = "io.spring.dependency-management")
-
-	apply(plugin = "kotlin")
-	apply(plugin = "kotlin-spring")
-	apply(plugin = "kotlin-jpa")
-
-	val springCloudVersion: String by project
-	val mockkVersion: String by project
-	val striktVersion: String by project
-
-	dependencies {
-
-		// Kotlin
-		implementation("org.jetbrains.kotlin:kotlin-reflect")
-		implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-
-		// Jackson
-		implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-		implementation("com.fasterxml.jackson.module:jackson-module-afterburner")
-
-		// Spring Boot
-		implementation("org.springframework.boot:spring-boot-starter-web")
-		implementation("org.springframework.boot:spring-boot-starter-aop")
-
-		// Test
-		testImplementation("org.springframework.boot:spring-boot-starter-test")
-		testImplementation("io.mockk:mockk:$mockkVersion")
-		testImplementation("io.strikt:strikt-core:$striktVersion")
-
-		// Annotation Processing
-		annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+tasks.withType<KotlinCompile> {
+	kotlinOptions {
+		freeCompilerArgs = listOf("-Xjsr305=strict")
+		jvmTarget = "17"
 	}
+}
 
-
-	dependencyManagement {
-		imports {
-			mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
-		}
-	}
-
-
-	tasks.withType<KotlinCompile> {
-		kotlinOptions {
-			freeCompilerArgs = listOf("-Xjsr305=strict")
-			jvmTarget = "17"
-		}
-	}
-
-	tasks.withType<Test> {
-		useJUnitPlatform()
-	}
+tasks.withType<Test> {
+	useJUnitPlatform()
 }

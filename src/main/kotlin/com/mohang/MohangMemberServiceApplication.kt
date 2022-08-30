@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class MohangMemberAdminApplication
+class MohangMemberServiceApplication
 
 fun main(args: Array<String>) {
-    runApplication<MohangMemberAdminApplication>(*args)
+	runApplication<MohangMemberServiceApplication>(*args)
 }
