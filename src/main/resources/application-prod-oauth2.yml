@@ -8,9 +8,10 @@ spring:
           google:
             clientId: ${google.clientId}
             clientSecret: ${google.clientSecret}
-            scope:
-              - email
-              - profile
+            clientAuthenticationMethod: post
+            authorizationGrantType: authorization_code
+            redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+
           naver:
             clientId: ${naver.clientId}
             clientSecret: ${naver.clientSecret}
