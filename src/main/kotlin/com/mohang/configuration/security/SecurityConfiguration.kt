@@ -55,10 +55,12 @@ class SecurityConfiguration {
             // OAuth2 로그인 사용
             oauth2Login {
 
-                loginPage = "/login/oauth2"
 
                 authorizationEndpoint {
-                    //http://~~~~/{baseUri} 로 요청이 들어오면 OAuth2 인증을 수행한다.
+                    /*
+                     http://~~~~/{baseUri} 로 요청이 들어오면 OAuth2 인증을 수행한다
+                     EX : http://localhost:9999/login/oauth2/authorization/kakao
+                     */
                     baseUri = "/login/oauth2/authorization"
                 }
 
