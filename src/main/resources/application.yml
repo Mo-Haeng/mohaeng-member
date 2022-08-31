@@ -3,7 +3,9 @@ spring:
     group:
 
       local:
+        - local-oauth2
 
       prod:
+        - prod-oauth2
 
     active: local
