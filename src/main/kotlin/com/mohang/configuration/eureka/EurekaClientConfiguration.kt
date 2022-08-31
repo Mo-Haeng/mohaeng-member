@@ -8,5 +8,5 @@ import org.springframework.context.annotation.Configuration
  */
 @EnableDiscoveryClient
 @Configuration
-class EurekaClientConfig {
+class EurekaClientConfiguration {
 }
