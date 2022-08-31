@@ -15,7 +15,7 @@ enum class PermitAllURI(val method: HttpMethod?, val uri: String) {
     SIGN_UP(HttpMethod.POST, "/api/member"),
 
     // 헬스 체크 URI
-    HEALTH_CHECK(HttpMethod.POST, "/health-check"),
+    HEALTH_CHECK(HttpMethod.GET, "/health-check"),
 
     // H2 URI
     H2(null, "/h2-console/**"),
