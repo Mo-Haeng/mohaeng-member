@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.mohang.configuration.security.enums.PermitAllURI
 import com.mohang.domain.enums.Role.BASIC
 import com.mohang.domain.member.MemberPasswordEncoder
-import com.mohang.infrastructure.auth.jsonlogin.filter.JsonLoginProcessingFilter
+import com.mohang.infrastructure.auth.jsonlogin.filter.JsonAuthenticationProcessingFilter
 import com.mohang.infrastructure.auth.jsonlogin.provider.JsonAuthenticationProvider
 import com.mohang.infrastructure.auth.jsonlogin.provider.usecase.LoadMemberUseCase
 import com.mohang.infrastructure.auth.oauth2.handler.OAuth2AuthenticationSuccessHandler
@@ -76,7 +76,7 @@ class SecurityConfiguration {
                 // authenticationFailureHandler = 인증 실패 시 처리할 핸들러 TODO(" 적절한 예외 메세지 ")
             }
 
-            addFilterBefore<UsernamePasswordAuthenticationFilter>(jsonLoginProcessingFilter())
+            addFilterBefore<UsernamePasswordAuthenticationFilter>(jsonAuthenticationProcessingFilter())
         }
 
         return http.build()
@@ -111,15 +111,15 @@ class SecurityConfiguration {
      * Json으로 로그인 진행하는 필터
      */
     @Bean
-    fun jsonLoginProcessingFilter(
+    fun jsonAuthenticationProcessingFilter(
         objectMapper: ObjectMapper? = null,
         jsonAuthenticationProvider: JsonAuthenticationProvider? = null,
-    ): JsonLoginProcessingFilter {
+    ): JsonAuthenticationProcessingFilter {
 
         checkNotNull(objectMapper) { "objectMapper is Null" }
         checkNotNull(jsonAuthenticationProvider) { "jsonAuthenticationProvider is Null" }
 
-        val filter = JsonLoginProcessingFilter(loginUri = PermitAllURI.LOGIN.uri, objectMapper)
+        val filter = JsonAuthenticationProcessingFilter(loginUri = PermitAllURI.LOGIN.uri, objectMapper)
         filter.setAuthenticationManager(ProviderManager(jsonAuthenticationProvider))
 
         return filter

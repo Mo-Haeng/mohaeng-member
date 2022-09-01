@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse
 /**
  * Created by ShinD on 2022/09/01.
  */
-class JsonLoginProcessingFilter(
+class JsonAuthenticationProcessingFilter(
 
     loginUri: String, // 로그인 진행할 uri
 
