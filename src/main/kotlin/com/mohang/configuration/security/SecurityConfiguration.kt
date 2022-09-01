@@ -1,7 +1,10 @@
 package com.mohang.configuration.security
 
+import com.mohang.application.usecase.OAuth2SignUpUseCase
 import com.mohang.configuration.security.enums.PermitAllURI
 import com.mohang.domain.enums.Role.BASIC
+import com.mohang.infrastructure.auth.oauth2.OAuth2SignUpLoginUserService
+import com.mohang.infrastructure.auth.oauth2.handler.OAuth2AuthenticationSuccessHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -29,7 +32,7 @@ class SecurityConfiguration {
                         else -> authorize(method = value.method, pattern = value.uri, permitAll)
                     }
                 }
-                // 이외 모든 요청은 BASIC 이상이어야
+                // 이외 모든 요청은 BASIC 이상이어야 함
                 authorize(anyRequest, hasRole(BASIC.name))
             }
 
@@ -42,7 +45,6 @@ class SecurityConfiguration {
 
             // OAuth2 로그인 사용
             oauth2Login {
-
 
                 authorizationEndpoint {
                     /*
@@ -57,17 +59,41 @@ class SecurityConfiguration {
                     baseUri = "/*/oauth2/code/*"
                 }
 
-                // OAuth2 로그인 성공 시 사용자 정보를 받아와 파싱하는 서비스
-                userInfoEndpoint {  }
+                // OAuth2 인증 성공 시 사용자 정보를 받아와 파싱하는 서비스
+                userInfoEndpoint {
+                    userService = oauth2SignUpLoginUserService()
+                }
 
+                authenticationSuccessHandler = OAuth2AuthenticationSuccessHandler()
 
-                //authenticationSuccessHandler = 로그인 성공 시 처리할 핸들러
-
-                //authenticationFailureHandler = 로그인 실패 시 처리할 핸들러
+                // authenticationFailureHandler = 인증 실패 시 처리할 핸들러 TODO(" 적절한 예외 메세지 ")
             }
+
+            // addFilterBefore<>() TODO(" JSON 로그인 구현 ")
         }
 
         return http.build()
     }
 
+
+
+    /**
+     * OAuth2 로그인 사용자 정보 저장 관리
+     */
+    @Bean
+    fun oauth2SignUpLoginUserService(
+        oauth2SignUpUseCase: OAuth2SignUpUseCase? = null
+    ): OAuth2SignUpLoginUserService {
+
+        checkNotNull(oauth2SignUpUseCase) { "oAuthSignUpUseCase is Null" }
+        return OAuth2SignUpLoginUserService(oauth2SignUpUseCase)
+    }
+
+    /**
+     * OAuth2 로그인 사용자 정보 저장 관리
+     */
+    @Bean
+    fun oauth2AuthenticationSuccessHandler(): OAuth2AuthenticationSuccessHandler {
+        return OAuth2AuthenticationSuccessHandler()
+    }
 }
