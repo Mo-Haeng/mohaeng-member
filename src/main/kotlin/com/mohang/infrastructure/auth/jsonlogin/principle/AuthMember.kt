@@ -1,4 +1,4 @@
-package com.mohang.infrastructure.auth.userdetails
+package com.mohang.infrastructure.auth.jsonlogin.principle
 
 import com.mohang.domain.enums.Role
 
@@ -8,6 +8,6 @@ import com.mohang.domain.enums.Role
 class AuthMember(
 
     val id: Long,
-
+    val username: String,
     val role: Role,
 )

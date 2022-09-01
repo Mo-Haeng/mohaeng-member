@@ -1,16 +1,23 @@
 package com.mohang.configuration.security
 
-import com.mohang.application.usecase.OAuth2SignUpUseCase
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.mohang.configuration.security.enums.PermitAllURI
 import com.mohang.domain.enums.Role.BASIC
-import com.mohang.infrastructure.auth.oauth2.OAuth2SignUpLoginUserService
+import com.mohang.domain.member.MemberPasswordEncoder
+import com.mohang.infrastructure.auth.jsonlogin.filter.JsonLoginProcessingFilter
+import com.mohang.infrastructure.auth.jsonlogin.provider.JsonAuthenticationProvider
+import com.mohang.infrastructure.auth.jsonlogin.provider.usecase.LoadMemberUseCase
 import com.mohang.infrastructure.auth.oauth2.handler.OAuth2AuthenticationSuccessHandler
+import com.mohang.infrastructure.auth.oauth2.userservice.OAuth2SignUpLoginUserService
+import com.mohang.infrastructure.auth.oauth2.userservice.usecase.OAuth2SignUpUseCase
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.authentication.ProviderManager
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy.STATELESS
 import org.springframework.security.config.web.servlet.invoke
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 /**
  * Created by ShinD on 2022/08/31.
@@ -64,16 +71,17 @@ class SecurityConfiguration {
                     userService = oauth2SignUpLoginUserService()
                 }
 
-                authenticationSuccessHandler = OAuth2AuthenticationSuccessHandler()
+                authenticationSuccessHandler = oauth2AuthenticationSuccessHandler()
 
                 // authenticationFailureHandler = 인증 실패 시 처리할 핸들러 TODO(" 적절한 예외 메세지 ")
             }
 
-            // addFilterBefore<>() TODO(" JSON 로그인 구현 ")
+            addFilterBefore<UsernamePasswordAuthenticationFilter>(jsonLoginProcessingFilter())
         }
 
         return http.build()
     }
+
 
 
 
@@ -82,10 +90,10 @@ class SecurityConfiguration {
      */
     @Bean
     fun oauth2SignUpLoginUserService(
-        oauth2SignUpUseCase: OAuth2SignUpUseCase? = null
+        oauth2SignUpUseCase: OAuth2SignUpUseCase? = null,
     ): OAuth2SignUpLoginUserService {
 
-        checkNotNull(oauth2SignUpUseCase) { "oAuthSignUpUseCase is Null" }
+        checkNotNull(oauth2SignUpUseCase) { "OAuth2SignUpUseCase is Null" }
         return OAuth2SignUpLoginUserService(oauth2SignUpUseCase)
     }
 
@@ -96,4 +104,36 @@ class SecurityConfiguration {
     fun oauth2AuthenticationSuccessHandler(): OAuth2AuthenticationSuccessHandler {
         return OAuth2AuthenticationSuccessHandler()
     }
+
+
+
+    /**
+     * Json으로 로그인 진행하는 필터
+     */
+    @Bean
+    fun jsonLoginProcessingFilter(
+        objectMapper: ObjectMapper? = null,
+        jsonAuthenticationProvider: JsonAuthenticationProvider? = null,
+    ): JsonLoginProcessingFilter {
+
+        checkNotNull(objectMapper) { "objectMapper is Null" }
+        checkNotNull(jsonAuthenticationProvider) { "jsonAuthenticationProvider is Null" }
+
+        val filter = JsonLoginProcessingFilter(loginUri = PermitAllURI.LOGIN.uri, objectMapper)
+        filter.setAuthenticationManager(ProviderManager(jsonAuthenticationProvider))
+
+        return filter
+    }
+
+
+
+    /**
+     * Json으로 로그인 진행 시 사용자 인증정보 제공
+     */
+    @Bean
+    fun jsonAuthenticationProvider(
+        encoder: MemberPasswordEncoder,
+        loginUserService: LoadMemberUseCase,
+    ): JsonAuthenticationProvider
+        = JsonAuthenticationProvider(encoder, loginUserService)
 }
