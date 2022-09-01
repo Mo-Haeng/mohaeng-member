@@ -1,4 +1,4 @@
-package com.mohang.application.usecase
+package com.mohang.infrastructure.auth.oauth2.userservice.usecase
 
 import com.mohang.domain.member.Member
 import com.mohang.infrastructure.persistence.MemberRepository
@@ -8,6 +8,8 @@ import org.springframework.transaction.support.TransactionTemplate
 
 /**
  * Created by ShinD on 2022/09/01.
+ *
+ * OAuth2 로그인 시 사용되며, OAuth2SignUpLoginUserService에서 사용한다.
  */
 @Service
 class OAuth2SignUpUseCase (
@@ -34,6 +36,5 @@ class OAuth2SignUpUseCase (
                 log.debug { "회원가입 진행" }
                 memberRepository.save(member)
             }!!
-
     }
 }

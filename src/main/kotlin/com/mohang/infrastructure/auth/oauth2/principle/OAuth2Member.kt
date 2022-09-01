@@ -1,4 +1,4 @@
-package com.mohang.infrastructure.auth.userdetails
+package com.mohang.infrastructure.auth.oauth2.principle
 
 import com.mohang.domain.enums.Role
 import org.springframework.security.core.authority.SimpleGrantedAuthority

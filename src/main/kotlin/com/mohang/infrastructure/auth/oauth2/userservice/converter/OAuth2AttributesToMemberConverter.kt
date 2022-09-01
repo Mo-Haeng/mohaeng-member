@@ -1,4 +1,4 @@
-package com.mohang.infrastructure.auth.oauth2
+package com.mohang.infrastructure.auth.oauth2.userservice.converter
 
 import com.mohang.domain.enums.OAuth2Type
 import com.mohang.domain.enums.OAuth2Type.*
@@ -19,19 +19,21 @@ class OAuth2AttributesToMemberConverter {
             else -> throw RuntimeException("등록되지 않은 OAuth2 서비스입니다.")
     }
 
+
+
+    /**
+     * 카카오 회원 정보를 Member 객체로 변환
+     */
     private fun convertKakao(attributes: Map<String, Any>): Member {
 
         val oAuth2LoginId = OAuth2LoginId(oauth2Type = KAKAO, value = attributes[KAKAO.oauth2IdName].toString())
-        val kakaoAccountMap = attributes["kakao_account"] as Map<*, *>
 
-        val isEmailValid = kakaoAccountMap["is_email_valid"] as Boolean
+        val kakaoAccountMap = getKakaoAccountMap(attributes)
+        val email = getEmail(kakaoAccountMap)
 
-        var email = kakaoAccountMap["email"] as String?
-        if (!isEmailValid) email = null
-
-        val kakaoProfileMap = kakaoAccountMap["profile"] as Map<*, *>
-        val nickname = kakaoProfileMap["nickname"] as String
-        val profileImagePath = kakaoProfileMap["profile_image_url"] as String
+        val kakaoProfileMap = getKakaoProfileMap(kakaoAccountMap)
+        val nickname = getNickname(kakaoProfileMap)
+        val profileImagePath = getProfileImagePath(kakaoProfileMap)
 
         return Member(
             role = Role.BASIC,
@@ -43,6 +45,26 @@ class OAuth2AttributesToMemberConverter {
         )
     }
 
+    private fun getKakaoAccountMap(attributes: Map<String, Any>) =
+        attributes["kakao_account"] as Map<*, *>
+
+    private fun getEmail(kakaoAccountMap: Map<*, *>): String? {
+        var email = kakaoAccountMap["email"] as String?
+        val isEmailValid = kakaoAccountMap["is_email_valid"] as Boolean
+        if (! isEmailValid) email = null
+        return email
+    }
+
+    private fun getKakaoProfileMap(kakaoAccountMap: Map<*, *>) = kakaoAccountMap["profile"] as Map<*, *>
+
+    private fun getProfileImagePath(kakaoProfileMap: Map<*, *>) = kakaoProfileMap["profile_image_url"] as String
+
+    private fun getNickname(kakaoProfileMap: Map<*, *>) = kakaoProfileMap["nickname"] as String
+
+
+
+
+
     private fun convertGoogle(attributes: Map<String, Any>): Member {
         TODO("Not yet implemented")
     }
@@ -50,5 +72,4 @@ class OAuth2AttributesToMemberConverter {
     private fun convertNaver(attributes: Map<String, Any>): Member {
         TODO("Not yet implemented")
     }
-
 }
