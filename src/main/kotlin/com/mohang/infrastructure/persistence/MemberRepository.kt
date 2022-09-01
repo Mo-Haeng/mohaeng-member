@@ -13,4 +13,6 @@ interface MemberRepository : JpaRepository<Member, Long> {
      * 회원가입 시 중복 검사를 위해 사용된다.
      */
     fun findByOauth2LoginId(oauth2LoginId: OAuth2LoginId): Member?
+
+    fun findByEmail(email: String): Member?
 }

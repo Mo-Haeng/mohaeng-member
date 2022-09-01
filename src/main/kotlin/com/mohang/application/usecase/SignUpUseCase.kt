@@ -1,5 +1,6 @@
 package com.mohang.application.usecase
 
+import com.mohang.application.exception.DuplicateEmailException
 import com.mohang.application.exception.DuplicateUsernameException
 import com.mohang.application.usecase.dto.SignUpDto
 import com.mohang.domain.member.Member
@@ -54,9 +55,16 @@ class SignUpUseCase<in T : SignUpDto> (
      * 중복 가입 정보 체크
      */
     private fun checkDuplicate(member: Member) {
+        with(member) {
+            // 이메일 중복 검사
+            memberRepository.findByEmail(email!!)?.let {
+                throw DuplicateEmailException()
+            }
 
-        memberRepository.findByOauth2LoginId(member.oauth2LoginId)
-            //이미 존재하는 경우 Exception 발생
-            ?.let { throw DuplicateUsernameException() }
+            // 아이디 중복 검사
+            memberRepository.findByOauth2LoginId(oauth2LoginId)?.let {
+                throw DuplicateUsernameException()
+            }
+        }
     }
 }
