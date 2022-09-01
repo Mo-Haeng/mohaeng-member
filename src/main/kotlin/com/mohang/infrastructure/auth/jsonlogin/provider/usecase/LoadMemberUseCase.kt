@@ -21,6 +21,11 @@ class LoadMemberUseCase(
         val member = memberRepository.findByOauth2LoginId(oAuth2LoginId)
             ?: throw AuthException("일치하는 회원이 없습니다.")
 
-        return MemberDetails(id = member.id!!, username = oAuth2LoginId.value, password = member.password!!, role = member.role)
+        return MemberDetails(
+            id = member.id!!,
+            username = oAuth2LoginId.value,
+            password = member.password!!,
+            role = member.role
+        )
     }
 }

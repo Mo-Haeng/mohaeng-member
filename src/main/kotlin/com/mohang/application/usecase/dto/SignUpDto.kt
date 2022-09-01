@@ -13,8 +13,6 @@ interface SignUpDto {
     fun toEntity(): Member
 }
 
-
-
 /**
  * 일반 회원가입시 사용
  */
@@ -31,7 +29,6 @@ data class BasicSignUpDto(
     val profileImagePath: String?, // 프로필 사진 경로
 
     val username: String, // 아이디
-
 ) : SignUpDto {
 
     override fun toEntity() =

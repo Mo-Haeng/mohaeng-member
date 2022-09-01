@@ -10,8 +10,11 @@ import org.springframework.security.core.userdetails.User
 class MemberDetails(
 
     val id: Long,
+
     username: String,
+
     password: String,
+
     val role: Role,
 ) : User(
     username,

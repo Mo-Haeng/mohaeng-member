@@ -15,18 +15,17 @@ import javax.validation.Valid
  * Created by ShinD on 2022/08/30.
  */
 @RestController
-class SignUpRestController (
+class SignUpRestController(
 
-    var signUpUseCase: SignUpUseCase<SignUpDto>
-
+    var signUpUseCase: SignUpUseCase<SignUpDto>,
 ) {
 
-    private val log = KotlinLogging.logger {  }
+    private val log = KotlinLogging.logger { }
 
     @PostMapping("/api/member")
     fun signUp(
         @Valid @RequestBody signUpRequest: SignUpRequest,
-    ) : ResponseEntity<Unit> {
+    ): ResponseEntity<Unit> {
 
         log.debug { "SignUpRestController.signUp()" }
 

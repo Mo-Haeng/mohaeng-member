@@ -5,6 +5,7 @@ import com.mohang.configuration.security.enums.PermitAllURI
 import com.mohang.domain.enums.Role.BASIC
 import com.mohang.domain.member.MemberPasswordEncoder
 import com.mohang.infrastructure.auth.jsonlogin.filter.JsonAuthenticationProcessingFilter
+import com.mohang.infrastructure.auth.jsonlogin.handler.JsonAuthenticationSuccessHandler
 import com.mohang.infrastructure.auth.jsonlogin.provider.JsonAuthenticationProvider
 import com.mohang.infrastructure.auth.jsonlogin.provider.usecase.LoadMemberUseCase
 import com.mohang.infrastructure.auth.oauth2.handler.OAuth2AuthenticationSuccessHandler
@@ -52,7 +53,6 @@ class SecurityConfiguration {
 
             // OAuth2 로그인 사용
             oauth2Login {
-
                 authorizationEndpoint {
                     /*
                      http://~~~~/{baseUri} 로 요청이 들어오면 OAuth2 인증을 수행한다
@@ -60,22 +60,17 @@ class SecurityConfiguration {
                      */
                     baseUri = "/login/oauth2/authorization"
                 }
-
                 redirectionEndpoint {
                     // 로그인 API 등록 시 Redirect URL 설정과 동일해야 함
                     baseUri = "/*/oauth2/code/*"
                 }
-
                 // OAuth2 인증 성공 시 사용자 정보를 받아와 파싱하는 서비스
                 userInfoEndpoint {
                     userService = oauth2SignUpLoginUserService()
                 }
-
                 authenticationSuccessHandler = oauth2AuthenticationSuccessHandler()
-
                 // authenticationFailureHandler = 인증 실패 시 처리할 핸들러 TODO(" 적절한 예외 메세지 ")
             }
-
             addFilterBefore<UsernamePasswordAuthenticationFilter>(jsonAuthenticationProcessingFilter())
         }
 
@@ -97,6 +92,9 @@ class SecurityConfiguration {
         return OAuth2SignUpLoginUserService(oauth2SignUpUseCase)
     }
 
+
+
+
     /**
      * OAuth2 로그인 사용자 정보 저장 관리
      */
@@ -107,6 +105,7 @@ class SecurityConfiguration {
 
 
 
+
     /**
      * Json으로 로그인 진행하는 필터
      */
@@ -114,16 +113,21 @@ class SecurityConfiguration {
     fun jsonAuthenticationProcessingFilter(
         objectMapper: ObjectMapper? = null,
         jsonAuthenticationProvider: JsonAuthenticationProvider? = null,
+        jsonAuthenticationSuccessHandler: JsonAuthenticationSuccessHandler? = null,
     ): JsonAuthenticationProcessingFilter {
 
         checkNotNull(objectMapper) { "objectMapper is Null" }
         checkNotNull(jsonAuthenticationProvider) { "jsonAuthenticationProvider is Null" }
+        checkNotNull(jsonAuthenticationSuccessHandler) { "jsonAuthenticationSuccessHandler is Null" }
 
         val filter = JsonAuthenticationProcessingFilter(loginUri = PermitAllURI.LOGIN.uri, objectMapper)
         filter.setAuthenticationManager(ProviderManager(jsonAuthenticationProvider))
+        filter.setAuthenticationSuccessHandler(jsonAuthenticationSuccessHandler)
+        //filter.setAuthenticationFailureHandler()
 
         return filter
     }
+
 
 
 
@@ -134,6 +138,14 @@ class SecurityConfiguration {
     fun jsonAuthenticationProvider(
         encoder: MemberPasswordEncoder,
         loginUserService: LoadMemberUseCase,
-    ): JsonAuthenticationProvider
-        = JsonAuthenticationProvider(encoder, loginUserService)
+    ): JsonAuthenticationProvider = JsonAuthenticationProvider(encoder, loginUserService)
+
+
+
+
+    /**
+     * Json으로 로그인 진행 시 사용자 인증정보 제공
+     */
+    @Bean
+    fun jsonAuthenticationSuccessHandler(): JsonAuthenticationSuccessHandler = JsonAuthenticationSuccessHandler()
 }

@@ -5,19 +5,20 @@ package com.mohang.domain.enums
  */
 enum class OAuth2Type(val registrationId: String, val oauth2IdName: String) {
 
-    NONE("none","username"), // 일반 회원가입
+    NONE("none", "username"), // 일반 회원가입
 
-    KAKAO("kakao","id"),
+    KAKAO("kakao", "id"),
 
-    GOOGLE("google","email"),
+    GOOGLE("google", "email"),
 
-    NAVER("naver","id"),
+    NAVER("naver", "id"),
 
     ;
 
     companion object {
+
         fun fromRegistrationId(registrationId: String): OAuth2Type =
-            when(registrationId) {
+            when (registrationId) {
                 KAKAO.registrationId -> KAKAO
                 GOOGLE.registrationId -> GOOGLE
                 NAVER.registrationId -> NAVER

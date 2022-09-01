@@ -7,7 +7,6 @@ import org.springframework.http.HttpMethod
  */
 enum class PermitAllURI(val method: HttpMethod?, val uri: String) {
 
-
     // 로그인 URI
     LOGIN(null, "/login/**"),
 

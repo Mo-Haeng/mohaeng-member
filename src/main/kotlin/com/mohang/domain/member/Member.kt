@@ -35,7 +35,6 @@ class Member(
 
     @Column(nullable = true)
     var profileImagePath: String?, // 프로필 사진 경로 (https://~~)
-
 ) : BaseEntity() {
 
     /**

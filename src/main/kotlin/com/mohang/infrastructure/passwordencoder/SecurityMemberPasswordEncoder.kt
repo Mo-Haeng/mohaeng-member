@@ -7,11 +7,10 @@ import org.springframework.security.crypto.password.PasswordEncoder
 /**
  * Created by ShinD on 2022/09/01.
  */
-class SecurityMemberPasswordEncoder: MemberPasswordEncoder {
+class SecurityMemberPasswordEncoder : MemberPasswordEncoder {
 
     // Security의 패스워드 인코더에 기능 구현을 위임
     private val passwordEncoder: PasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder()
-
 
     override fun encode(rawPassword: String): String =
         passwordEncoder.encode(rawPassword)

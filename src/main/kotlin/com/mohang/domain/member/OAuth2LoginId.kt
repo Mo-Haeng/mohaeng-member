@@ -10,7 +10,7 @@ import javax.persistence.Enumerated
  * Created by ShinD on 2022/08/30.
  */
 @Embeddable
-data class OAuth2LoginId (
+data class OAuth2LoginId(
 
     @Enumerated(STRING)
     val oauth2Type: OAuth2Type, // 회원가입 타입 - NONE(일반 회원가입), NAVER, GOOGLE, KAKAO
@@ -27,7 +27,5 @@ data class OAuth2LoginId (
      *  - value: 123
      */
     @Column(name = "oauth2_id_value")
-    val value: String
-
-) {
-}
+    val value: String,
+)

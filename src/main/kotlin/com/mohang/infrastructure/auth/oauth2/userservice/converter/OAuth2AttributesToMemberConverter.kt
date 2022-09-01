@@ -12,14 +12,12 @@ import com.mohang.domain.member.OAuth2LoginId
 class OAuth2AttributesToMemberConverter {
 
     fun convert(oAuth2Type: OAuth2Type, attributes: Map<String, Any>): Member =
-        when(oAuth2Type) {
+        when (oAuth2Type) {
             KAKAO -> convertKakao(attributes)
             GOOGLE -> convertGoogle(attributes)
             NAVER -> convertNaver(attributes)
             else -> throw RuntimeException("등록되지 않은 OAuth2 서비스입니다.")
-    }
-
-
+        }
 
     /**
      * 카카오 회원 정보를 Member 객체로 변환
@@ -51,7 +49,7 @@ class OAuth2AttributesToMemberConverter {
     private fun getEmail(kakaoAccountMap: Map<*, *>): String? {
         var email = kakaoAccountMap["email"] as String?
         val isEmailValid = kakaoAccountMap["is_email_valid"] as Boolean
-        if (! isEmailValid) email = null
+        if (!isEmailValid) email = null
         return email
     }
 
@@ -60,10 +58,6 @@ class OAuth2AttributesToMemberConverter {
     private fun getProfileImagePath(kakaoProfileMap: Map<*, *>) = kakaoProfileMap["profile_image_url"] as String
 
     private fun getNickname(kakaoProfileMap: Map<*, *>) = kakaoProfileMap["nickname"] as String
-
-
-
-
 
     private fun convertGoogle(attributes: Map<String, Any>): Member {
         TODO("Not yet implemented")

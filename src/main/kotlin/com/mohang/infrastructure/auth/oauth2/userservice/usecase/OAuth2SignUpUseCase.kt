@@ -19,12 +19,9 @@ class OAuth2SignUpUseCase(
     private val memberRepository: MemberRepository,
 
     private val transaction: TransactionTemplate,
-
-    ) {
+) {
 
     private val log = KotlinLogging.logger { }
-
-
 
     /**
      * 회원 가입
@@ -34,7 +31,7 @@ class OAuth2SignUpUseCase(
         log.debug { "OAuthSignUpUseCase.command()" }
 
         return memberRepository.findByOauth2LoginId(member.oauth2LoginId)
-            // 존재하지 않는 경우 회원가입 진행
+        // 존재하지 않는 경우 회원가입 진행
             ?: signUp(member)
     }
 
@@ -45,11 +42,10 @@ class OAuth2SignUpUseCase(
             checkDuplicateEmail(member)
 
             memberRepository.save(member)
-        } !!
-
+        }!!
 
     private fun checkDuplicateEmail(member: Member) {
-        memberRepository.findByEmail(member.email !!)?.let {
+        memberRepository.findByEmail(member.email!!)?.let {
             throw DuplicateEmailException()
         }
     }

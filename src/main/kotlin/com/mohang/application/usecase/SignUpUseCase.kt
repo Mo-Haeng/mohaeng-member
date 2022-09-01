@@ -14,17 +14,16 @@ import org.springframework.transaction.support.TransactionTemplate
  * Created by ShinD on 2022/08/30.
  */
 @Service
-class SignUpUseCase<in T : SignUpDto> (
+class SignUpUseCase<in T : SignUpDto>(
 
     private val memberRepository: MemberRepository,
 
     private val transaction: TransactionTemplate,
 
     private val passwordEncoder: MemberPasswordEncoder,
-
 ) {
 
-    private val log = KotlinLogging.logger {  }
+    private val log = KotlinLogging.logger { }
 
     /**
      * 회원 가입
@@ -47,9 +46,8 @@ class SignUpUseCase<in T : SignUpDto> (
             //회원정보 저장
             memberRepository.save(member).id
 
-        } !! // Long? 타입이 반환되므로 강제 not null 처리
+        }!! // Long? 타입이 반환되므로 강제 not null 처리
     }
-
 
     /**
      * 중복 가입 정보 체크

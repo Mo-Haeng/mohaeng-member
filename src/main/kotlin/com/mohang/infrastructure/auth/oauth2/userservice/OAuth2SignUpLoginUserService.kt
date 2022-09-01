@@ -14,8 +14,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User
 class OAuth2SignUpLoginUserService(
 
     private val signUpUseCase: OAuth2SignUpUseCase,
-
-    ) : DefaultOAuth2UserService(){
+) : DefaultOAuth2UserService() {
 
     private val converter: OAuth2AttributesToMemberConverter = OAuth2AttributesToMemberConverter()
 

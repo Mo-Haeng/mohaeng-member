@@ -11,7 +11,6 @@ import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.core.Authentication
 
-
 /**
  * Created by ShinD on 2022/09/01.
  */
@@ -20,8 +19,7 @@ class JsonAuthenticationProvider(
     private val encoder: MemberPasswordEncoder,
 
     private val loadMemberUseCase: LoadMemberUseCase,
-
-    ) : AuthenticationProvider {
+) : AuthenticationProvider {
 
     /**
      * 인증 수행 -> 반환 결과가
@@ -49,17 +47,13 @@ class JsonAuthenticationProvider(
         return JsonUsernamePasswordToken(authMember, memberDetails.password, authMember.role)
     }
 
-
-
     /**
      *  비밀번호 일치여부 검사
      */
     private fun checkPassword(password: String, memberDetails: MemberDetails) {
-        if (! encoder.matches(password, memberDetails.password))
+        if (!encoder.matches(password, memberDetails.password))
             throw BadCredentialsException("비밀번호가 잘못되었습니다");
     }
-
-
 
     /**
      * JsonUsernamePasswordToken 허용

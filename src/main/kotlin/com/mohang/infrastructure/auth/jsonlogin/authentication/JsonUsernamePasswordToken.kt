@@ -17,12 +17,10 @@ class JsonUsernamePasswordToken : AbstractAuthenticationToken {
 
     private var credentials: Any? // password가 담김
 
-
-
     /**
      * 인증 시도 요청 시 생성자
      */
-    constructor(principal: Any, credentials: Any?): super(null) {
+    constructor(principal: Any, credentials: Any?) : super(null) {
         this.principal = principal
         this.credentials = credentials
         isAuthenticated = false
@@ -31,7 +29,7 @@ class JsonUsernamePasswordToken : AbstractAuthenticationToken {
     /**
      * 인증 완료 시 생성자
      */
-    constructor(principal: Any, credentials: Any?, role: Role): super(setOf(SimpleGrantedAuthority(role.authority))) {
+    constructor(principal: Any, credentials: Any?, role: Role) : super(setOf(SimpleGrantedAuthority(role.authority))) {
         this.principal = principal
         this.credentials = credentials
         isAuthenticated = true

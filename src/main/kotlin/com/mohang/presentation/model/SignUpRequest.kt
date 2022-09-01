@@ -19,15 +19,28 @@ data class SignUpRequest(
     @field:NotBlank val nickname: String,
 
     val profileImagePath: String? = null,
-
-    ) {
+) {
 
     fun toServiceDto(): BasicSignUpDto {
 
         //profileImagePath가 null이 아닌 ""가 넘어온 경우 null로 변경하여 넘기기
         if (profileImagePath != null && profileImagePath.isBlank()) {
-            return BasicSignUpDto(email = email, username = username, name = name, password = password, nickname = nickname, profileImagePath = null)
+            return BasicSignUpDto(
+                email = email,
+                username = username,
+                name = name,
+                password = password,
+                nickname = nickname,
+                profileImagePath = null
+            )
         }
-        return BasicSignUpDto(email = email, username = username, name = name, password = password,  nickname = nickname, profileImagePath = profileImagePath)
+        return BasicSignUpDto(
+            email = email,
+            username = username,
+            name = name,
+            password = password,
+            nickname = nickname,
+            profileImagePath = profileImagePath
+        )
     }
 }
