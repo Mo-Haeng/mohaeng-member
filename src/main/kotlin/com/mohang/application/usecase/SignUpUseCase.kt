@@ -55,7 +55,7 @@ class SignUpUseCase<in T : SignUpDto> (
      */
     private fun checkDuplicate(member: Member) {
 
-        memberRepository.findBySocialLoginId(member.socialLoginId)
+        memberRepository.findByOauth2LoginId(member.oauth2LoginId)
             //이미 존재하는 경우 Exception 발생
             ?.let { throw DuplicateUsernameException() }
     }

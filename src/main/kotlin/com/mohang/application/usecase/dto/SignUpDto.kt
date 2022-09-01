@@ -1,11 +1,9 @@
 package com.mohang.application.usecase.dto
 
-import com.mohang.domain.enums.Role
 import com.mohang.domain.enums.Role.BASIC
-import com.mohang.domain.enums.SocialLoginType
-import com.mohang.domain.enums.SocialLoginType.NONE
+import com.mohang.domain.enums.OAuth2Type.NONE
 import com.mohang.domain.member.Member
-import com.mohang.domain.member.SocialLoginId
+import com.mohang.domain.member.OAuth2LoginId
 
 /**
  * Created by ShinD on 2022/08/30.
@@ -44,6 +42,6 @@ data class BasicSignUpDto(
             name = name,
             nickname = nickname,
             profileImagePath = profileImagePath,
-            socialLoginId = SocialLoginId(socialLoginType = NONE, value = username),
+            oauth2LoginId = OAuth2LoginId(oauth2Type = NONE, value = username),
         )
 }

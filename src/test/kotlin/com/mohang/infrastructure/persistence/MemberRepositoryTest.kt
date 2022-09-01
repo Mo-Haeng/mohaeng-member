@@ -1,8 +1,7 @@
 package com.mohang.infrastructure.persistence
 
-import com.mohang.domain.enums.SocialLoginType
-import com.mohang.domain.enums.SocialLoginType.*
-import com.mohang.domain.member.SocialLoginId
+import com.mohang.domain.enums.OAuth2Type.*
+import com.mohang.domain.member.OAuth2LoginId
 import com.mohang.fixture.MemberFixture.notSavedMember
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,10 +23,10 @@ class MemberRepositoryTest {
     fun `findByRegistrationId 작동 테스트`() {
 
         //given
-        val general = SocialLoginId(socialLoginType = NONE, value = "sample email")
-        val google = SocialLoginId(socialLoginType = GOOGLE, value = "sample google email")
-        val kakao = SocialLoginId(socialLoginType = KAKAO, value = "sample kakao Id")
-        val naver = SocialLoginId(socialLoginType = NAVER, value = "sample id")
+        val general = OAuth2LoginId(oauth2Type = NONE, value = "sample email")
+        val google = OAuth2LoginId(oauth2Type = GOOGLE, value = "sample google email")
+        val kakao = OAuth2LoginId(oauth2Type = KAKAO, value = "sample kakao Id")
+        val naver = OAuth2LoginId(oauth2Type = NAVER, value = "sample id")
 
         val generalMember = notSavedMember(socialLoginId = general)
         val googleMember = notSavedMember(socialLoginId = google)
@@ -38,9 +37,9 @@ class MemberRepositoryTest {
 
 
         //when, then
-        expectThat(memberRepository.findBySocialLoginId(general)).isEqualTo(generalMember)
-        expectThat(memberRepository.findBySocialLoginId(google)).isEqualTo(googleMember)
-        expectThat(memberRepository.findBySocialLoginId(kakao)).isEqualTo(kakaoMember)
-        expectThat(memberRepository.findBySocialLoginId(naver)).isEqualTo(naverMember)
+        expectThat(memberRepository.findByOauth2LoginId(general)).isEqualTo(generalMember)
+        expectThat(memberRepository.findByOauth2LoginId(google)).isEqualTo(googleMember)
+        expectThat(memberRepository.findByOauth2LoginId(kakao)).isEqualTo(kakaoMember)
+        expectThat(memberRepository.findByOauth2LoginId(naver)).isEqualTo(naverMember)
     }
 }

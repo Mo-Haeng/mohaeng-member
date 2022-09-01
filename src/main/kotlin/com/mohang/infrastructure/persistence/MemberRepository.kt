@@ -1,7 +1,7 @@
 package com.mohang.infrastructure.persistence
 
 import com.mohang.domain.member.Member
-import com.mohang.domain.member.SocialLoginId
+import com.mohang.domain.member.OAuth2LoginId
 import org.springframework.data.jpa.repository.JpaRepository
 
 /**
@@ -12,5 +12,5 @@ interface MemberRepository : JpaRepository<Member, Long> {
     /**
      * 회원가입 시 중복 검사를 위해 사용된다.
      */
-    fun findBySocialLoginId(socialLoginId: SocialLoginId): Member?
+    fun findByOauth2LoginId(oauth2LoginId: OAuth2LoginId): Member?
 }

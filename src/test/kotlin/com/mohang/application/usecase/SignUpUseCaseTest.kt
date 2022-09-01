@@ -2,9 +2,9 @@ package com.mohang.application.usecase
 
 import com.mohang.application.exception.DuplicateUsernameException
 import com.mohang.application.usecase.dto.SignUpDto
-import com.mohang.domain.enums.SocialLoginType.NONE
+import com.mohang.domain.enums.OAuth2Type.NONE
 import com.mohang.domain.member.MemberPasswordEncoder
-import com.mohang.domain.member.SocialLoginId
+import com.mohang.domain.member.OAuth2LoginId
 import com.mohang.fixture.MemberFixture.basicSignUpDto
 import com.mohang.fixture.MemberFixture.notSavedMember
 import com.mohang.fixture.MemberFixture.savedMember
@@ -52,11 +52,11 @@ class SignUpUseCaseTest {
         //given
         val username = "sample username"
         val encodedPw = "{encoded} pw"
-        val general = SocialLoginId(socialLoginType = NONE, value = username)
+        val general = OAuth2LoginId(oauth2Type = NONE, value = username)
         val savedMember = savedMember(socialLoginId = general, password = encodedPw)
 
         val basicSignUpDto = basicSignUpDto(username = username)
-        every { memberRepository.findBySocialLoginId(general) } returns null
+        every { memberRepository.findByOauth2LoginId(general) } returns null
         every { passwordEncoder.encode(basicSignUpDto.password) } returns encodedPw
         every { memberRepository.save(any()) } returns savedMember
 
@@ -68,7 +68,7 @@ class SignUpUseCaseTest {
             .isEqualTo(savedMember.id)
 
         //then
-        verify (exactly = 1){ memberRepository.findBySocialLoginId(general) }
+        verify (exactly = 1){ memberRepository.findByOauth2LoginId(general) }
         verify (exactly = 1){ passwordEncoder.encode(basicSignUpDto.password) }
         verify (exactly = 1){ memberRepository.save(any()) }
     }
@@ -79,10 +79,10 @@ class SignUpUseCaseTest {
 
         //given
         val username = "sample username"
-        val general = SocialLoginId(socialLoginType = NONE, value = username)
+        val general = OAuth2LoginId(oauth2Type = NONE, value = username)
 
         val basicSignUpDto = basicSignUpDto(username = username)
-        every { memberRepository.findBySocialLoginId(general) } returns notSavedMember()
+        every { memberRepository.findByOauth2LoginId(general) } returns notSavedMember()
 
         //when
         expectThrows<DuplicateUsernameException> { signUpUseCase.command(basicSignUpDto) }
@@ -98,10 +98,10 @@ class SignUpUseCaseTest {
         //given
         val username = "sample username"
         val encodedPw = "{encoded} pw"
-        val general = SocialLoginId(socialLoginType = NONE, value = username)
+        val general = OAuth2LoginId(oauth2Type = NONE, value = username)
 
         val basicSignUpDto = basicSignUpDto(username = username)
-        every { memberRepository.findBySocialLoginId(general) } returns null
+        every { memberRepository.findByOauth2LoginId(general) } returns null
         every { passwordEncoder.encode(basicSignUpDto.password) } returns encodedPw
         every { memberRepository.save(any()) } throws RuntimeException()
 
