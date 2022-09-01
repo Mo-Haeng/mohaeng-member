@@ -8,9 +8,7 @@ import org.springframework.http.HttpMethod
 enum class PermitAllURI(val method: HttpMethod?, val uri: String) {
 
     // 로그인 URI
-    LOGIN(null, "/login/**"),
-
-    MAIN(null, "/"), // OAuth2 로그인 리다이렉트시 허용되어야 함
+    LOGIN(null, "/login"),
 
     // 회원가입 URI
     SIGN_UP(HttpMethod.POST, "/api/member"),

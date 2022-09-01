@@ -8,7 +8,9 @@ import com.mohang.infrastructure.auth.jsonlogin.filter.JsonAuthenticationProcess
 import com.mohang.infrastructure.auth.jsonlogin.handler.JsonAuthenticationSuccessHandler
 import com.mohang.infrastructure.auth.jsonlogin.provider.JsonAuthenticationProvider
 import com.mohang.infrastructure.auth.jsonlogin.provider.usecase.LoadMemberUseCase
+import com.mohang.infrastructure.auth.oauth2.handler.OAuth2AuthenticationFailureHandler
 import com.mohang.infrastructure.auth.oauth2.handler.OAuth2AuthenticationSuccessHandler
+import com.mohang.infrastructure.auth.oauth2.repo.OAuth2AuthorizationRequestBasedOnSessionRepository
 import com.mohang.infrastructure.auth.oauth2.userservice.OAuth2SignUpLoginUserService
 import com.mohang.infrastructure.auth.oauth2.userservice.usecase.OAuth2SignUpUseCase
 import org.springframework.context.annotation.Bean
@@ -31,6 +33,7 @@ class SecurityConfiguration {
 
         http {
 
+            //== URL 권한 정보 설정 ==//
             authorizeRequests {
                 // set permit all uri
                 PermitAllURI.values().map { value ->
@@ -44,8 +47,13 @@ class SecurityConfiguration {
                 authorize(anyRequest, hasRole(BASIC.name))
             }
 
+            //== csrf 사용 X ==//
             csrf { disable() }
+
+            //== httpBasic 사용 X ==//
             httpBasic { disable() }
+
+            //== session 사용 X ==//
             sessionManagement { sessionCreationPolicy = STATELESS }
 
             // h2 사용할 수 있도록 설정
@@ -59,26 +67,27 @@ class SecurityConfiguration {
                      EX : http://localhost:9999/login/oauth2/authorization/kakao
                      */
                     baseUri = "/login/oauth2/authorization"
+                    authorizationRequestRepository = OAuth2AuthorizationRequestBasedOnSessionRepository()
                 }
+
                 redirectionEndpoint {
                     // 로그인 API 등록 시 Redirect URL 설정과 동일해야 함
                     baseUri = "/*/oauth2/code/*"
                 }
+
                 // OAuth2 인증 성공 시 사용자 정보를 받아와 파싱하는 서비스
                 userInfoEndpoint {
                     userService = oauth2SignUpLoginUserService()
                 }
+
                 authenticationSuccessHandler = oauth2AuthenticationSuccessHandler()
-                // authenticationFailureHandler = 인증 실패 시 처리할 핸들러 TODO(" 적절한 예외 메세지 ")
+                authenticationFailureHandler = oauth2AuthenticationFailureHandler()
             }
             addFilterBefore<UsernamePasswordAuthenticationFilter>(jsonAuthenticationProcessingFilter())
         }
 
         return http.build()
     }
-
-
-
 
     /**
      * OAuth2 로그인 사용자 정보 저장 관리
@@ -92,19 +101,21 @@ class SecurityConfiguration {
         return OAuth2SignUpLoginUserService(oauth2SignUpUseCase)
     }
 
-
-
-
     /**
-     * OAuth2 로그인 사용자 정보 저장 관리
+     * OAuth2 로그인 성공 시 후처리
      */
     @Bean
     fun oauth2AuthenticationSuccessHandler(): OAuth2AuthenticationSuccessHandler {
         return OAuth2AuthenticationSuccessHandler()
     }
 
-
-
+    /**
+     * OAuth2 로그인 실패 시 후처리
+     */
+    @Bean
+    fun oauth2AuthenticationFailureHandler(): OAuth2AuthenticationFailureHandler {
+        return OAuth2AuthenticationFailureHandler()
+    }
 
     /**
      * Json으로 로그인 진행하는 필터
@@ -128,9 +139,6 @@ class SecurityConfiguration {
         return filter
     }
 
-
-
-
     /**
      * Json으로 로그인 진행 시 사용자 인증정보 제공
      */
@@ -139,9 +147,6 @@ class SecurityConfiguration {
         encoder: MemberPasswordEncoder,
         loginUserService: LoadMemberUseCase,
     ): JsonAuthenticationProvider = JsonAuthenticationProvider(encoder, loginUserService)
-
-
-
 
     /**
      * Json으로 로그인 진행 시 사용자 인증정보 제공
