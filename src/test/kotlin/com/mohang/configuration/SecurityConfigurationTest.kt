@@ -2,6 +2,9 @@ package com.mohang.configuration
 
 import com.mohang.application.usecase.SignUpUseCase
 import com.mohang.configuration.security.SecurityConfiguration
+import com.mohang.domain.member.MemberPasswordEncoder
+import com.mohang.infrastructure.auth.jsonlogin.provider.usecase.LoadMemberUseCase
+import com.mohang.infrastructure.auth.oauth2.userservice.usecase.OAuth2SignUpUseCase
 import com.ninjasquad.springmockk.MockkBean
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,22 +22,17 @@ import strikt.assertions.isNotEqualTo
  */
 @WebMvcTest
 @Import(SecurityConfiguration::class)
-@MockkBean(classes = [SignUpUseCase::class])
+@MockkBean(classes = [
+    SignUpUseCase::class,
+    MemberPasswordEncoder::class,
+    LoadMemberUseCase::class,
+    OAuth2SignUpUseCase::class
+
+])
 class SecurityConfigurationTest {
 
     @Autowired
     private lateinit var mockMvc: MockMvc
-
-
-    @Test
-    fun `login POST permit all`() {
-
-        mockMvc.post("/login")
-            //then
-            .andExpect {
-                status { isNotFound() }
-            }
-    }
 
     @Test
     fun `signUp POST permit all`() {
