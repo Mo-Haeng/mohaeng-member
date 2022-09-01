@@ -55,7 +55,7 @@ class JsonAuthenticationProvider(
      *  비밀번호 일치여부 검사
      */
     private fun checkPassword(password: String, memberDetails: MemberDetails) {
-        if (encoder.matches(password, memberDetails.password))
+        if (! encoder.matches(password, memberDetails.password))
             throw BadCredentialsException("비밀번호가 잘못되었습니다");
     }
 
