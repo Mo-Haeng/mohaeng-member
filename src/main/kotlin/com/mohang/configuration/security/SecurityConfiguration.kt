@@ -5,6 +5,8 @@ import com.mohang.application.jwt.usecase.AuthTokenCreateUseCase
 import com.mohang.configuration.security.enums.PermitAllURI
 import com.mohang.domain.enums.Role.BASIC
 import com.mohang.domain.member.MemberPasswordEncoder
+import com.mohang.infrastructure.authentication.exception.SendErrorAccessDeniedHandler
+import com.mohang.infrastructure.authentication.exception.SendErrorAuthenticationEntryPoint
 import com.mohang.infrastructure.authentication.jsonlogin.filter.JsonAuthenticationProcessingFilter
 import com.mohang.infrastructure.authentication.jsonlogin.handler.JsonAuthenticationSuccessHandler
 import com.mohang.infrastructure.authentication.jsonlogin.provider.JsonAuthenticationProvider
@@ -84,11 +86,19 @@ class SecurityConfiguration {
                 authenticationSuccessHandler = oauth2AuthenticationSuccessHandler()
                 authenticationFailureHandler = oauth2AuthenticationFailureHandler()
             }
+
+            exceptionHandling {
+                authenticationEntryPoint = sendErrorAuthenticationEntryPoint()
+                accessDeniedHandler = sendErrorAccessDeniedHandler()
+            }
+
             addFilterBefore<UsernamePasswordAuthenticationFilter>(jsonAuthenticationProcessingFilter())
         }
 
         return http.build()
     }
+
+
 
     /**
      * OAuth2 로그인 사용자 정보 저장 관리
@@ -102,17 +112,21 @@ class SecurityConfiguration {
         return OAuth2SignUpLoginUserService(oauth2SignUpUseCase)
     }
 
+
+
     /**
      * OAuth2 로그인 성공 시 후처리
      */
     @Bean
     fun oauth2AuthenticationSuccessHandler(
-        authTokenCreateUseCase: AuthTokenCreateUseCase? = null
+        authTokenCreateUseCase: AuthTokenCreateUseCase? = null,
     ): OAuth2AuthenticationSuccessHandler {
 
         checkNotNull(authTokenCreateUseCase) { "authTokenCreateUseCase is Null" }
         return OAuth2AuthenticationSuccessHandler(authTokenCreateUseCase)
     }
+
+
 
     /**
      * OAuth2 로그인 실패 시 후처리
@@ -121,6 +135,8 @@ class SecurityConfiguration {
     fun oauth2AuthenticationFailureHandler(): OAuth2AuthenticationFailureHandler {
         return OAuth2AuthenticationFailureHandler()
     }
+
+
 
     /**
      * Json으로 로그인 진행하는 필터
@@ -144,6 +160,8 @@ class SecurityConfiguration {
         return filter
     }
 
+
+
     /**
      * Json으로 로그인 진행 시 사용자 인증정보 제공
      */
@@ -153,15 +171,27 @@ class SecurityConfiguration {
         loginUserService: LoadMemberUseCase,
     ): JsonAuthenticationProvider = JsonAuthenticationProvider(encoder, loginUserService)
 
+
+
     /**
      * Json으로 로그인 진행 시 사용자 인증정보 제공
      */
     @Bean
     fun jsonAuthenticationSuccessHandler(
-        authTokenCreateUseCase: AuthTokenCreateUseCase? = null
+        authTokenCreateUseCase: AuthTokenCreateUseCase? = null,
     ): JsonAuthenticationSuccessHandler {
 
         checkNotNull(authTokenCreateUseCase) { "authTokenCreateUseCase is Null" }
         return JsonAuthenticationSuccessHandler(authTokenCreateUseCase)
+    }
+
+    @Bean
+    fun sendErrorAccessDeniedHandler(): SendErrorAccessDeniedHandler {
+        return SendErrorAccessDeniedHandler()
+    }
+
+    @Bean
+    fun sendErrorAuthenticationEntryPoint(): SendErrorAuthenticationEntryPoint {
+        return SendErrorAuthenticationEntryPoint()
     }
 }

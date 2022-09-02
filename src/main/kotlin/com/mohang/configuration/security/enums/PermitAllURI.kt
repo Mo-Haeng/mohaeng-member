@@ -8,7 +8,7 @@ import org.springframework.http.HttpMethod
 enum class PermitAllURI(val method: HttpMethod?, val uri: String) {
 
     // 로그인 URI
-    LOGIN(null, "/login"),
+    LOGIN(HttpMethod.POST, "/login"),
 
     // 회원가입 URI
     SIGN_UP(HttpMethod.POST, "/api/member"),
@@ -21,6 +21,9 @@ enum class PermitAllURI(val method: HttpMethod?, val uri: String) {
 
     // 예외 URI
     ERROR(null, "/error"),
+
+    // 메인
+    MAIN(null, "/"),
 
     ;
 }
