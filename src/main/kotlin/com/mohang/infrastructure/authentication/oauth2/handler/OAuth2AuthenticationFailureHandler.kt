@@ -24,7 +24,7 @@ class OAuth2AuthenticationFailureHandler : AuthenticationFailureHandler {
         request.session.invalidate()
 
         redirectUri = UriComponentsBuilder.fromUriString(redirectUri)
-            .queryParam("error", exception.localizedMessage)
+            .queryParam("error", exception.message)
             .build().toUriString()
 
         response.sendRedirect(redirectUri)
