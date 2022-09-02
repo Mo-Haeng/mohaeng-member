@@ -13,12 +13,14 @@ import javax.servlet.http.HttpServletResponse
  */
 class JsonAuthenticationSuccessHandler(
 
-    private val authTokenCreateUseCase: AuthTokenCreateUseCase
+    private val authTokenCreateUseCase: AuthTokenCreateUseCase,
+
+    // 토큰 반환 담당
+    private val authTokenSender: AuthTokenSender = AuthTokenSender(),
 
 ) : AuthenticationSuccessHandler {
 
-    // 토큰 반환 담당
-    private val authTokenSender: AuthTokenSender = AuthTokenSender()
+
 
     override fun onAuthenticationSuccess(
 
@@ -33,6 +35,5 @@ class JsonAuthenticationSuccessHandler(
 
         authTokenSender.sendByHeader(response = response, authToken = authToken)
         authTokenSender.sendByJson(response = response, authToken = authToken)
-
     }
 }

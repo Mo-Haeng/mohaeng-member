@@ -16,12 +16,10 @@ class OAuth2AuthenticationSuccessHandler(
 
     private val authTokenCreateUseCase: AuthTokenCreateUseCase,
 
-) : AuthenticationSuccessHandler {
-
     // 토큰 반환 담당
-    private val authTokenSender: AuthTokenSender = AuthTokenSender()
+    private val authTokenSender: AuthTokenSender = AuthTokenSender(),
 
-
+) : AuthenticationSuccessHandler {
 
     override fun onAuthenticationSuccess(
         request: HttpServletRequest,
@@ -29,11 +27,10 @@ class OAuth2AuthenticationSuccessHandler(
         authentication: Authentication,
     ) {
 
-        var redirectUrl = request.getSession(false).getAttribute(SESSION_REDIRECT_ATTR_NAME) as String
+        val redirectUrl = request.getSession(false).getAttribute(SESSION_REDIRECT_ATTR_NAME) as String
 
         // 필수!!
         request.session.invalidate()
-
 
         val principal = authentication.principal as AuthMemberPrinciple
 
