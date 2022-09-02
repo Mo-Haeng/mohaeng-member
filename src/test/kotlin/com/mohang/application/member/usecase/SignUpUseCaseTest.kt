@@ -1,5 +1,6 @@
 package com.mohang.application.member.usecase
 
+import com.mohang.application.member.exception.DuplicateEmailException
 import com.mohang.application.member.exception.DuplicateUsernameException
 import com.mohang.application.member.usecase.SignUpUseCase
 import com.mohang.application.member.usecase.dto.SignUpDto
@@ -37,7 +38,7 @@ class SignUpUseCaseTest {
 
     private val transaction: TransactionTemplate = MockTransactionTemplate()
 
-    private lateinit var signUpUseCase: SignUpUseCase<SignUpDto>
+    private lateinit var signUpUseCase: SignUpUseCase
 
     @MockK
     private var passwordEncoder: MemberPasswordEncoder = mockkClass(MemberPasswordEncoder::class)
@@ -60,6 +61,7 @@ class SignUpUseCaseTest {
         every { memberRepository.findByOauth2LoginId(general) } returns null
         every { passwordEncoder.encode(basicSignUpDto.password) } returns encodedPw
         every { memberRepository.save(any()) } returns savedMember
+        every { memberRepository.findByEmail(any()) } returns null
 
 
 
@@ -84,9 +86,28 @@ class SignUpUseCaseTest {
 
         val basicSignUpDto = basicSignUpDto(username = username)
         every { memberRepository.findByOauth2LoginId(general) } returns notSavedMember()
+        every { memberRepository.findByEmail(any()) } returns null
 
         //when
         expectThrows<DuplicateUsernameException> { signUpUseCase.command(basicSignUpDto) }
+
+        //then
+        verify (exactly = 0){ memberRepository.save(any()) }
+    }
+
+    @Test
+    fun `일반 회원가입 실패 - 이메일 중복`() {
+
+        //given
+        val username = "sample username"
+        val general = OAuth2LoginId(oauth2Type = NONE, value = username)
+
+        val basicSignUpDto = basicSignUpDto(username = username)
+        every { memberRepository.findByOauth2LoginId(general) } returns null
+        every { memberRepository.findByEmail(any()) } returns notSavedMember()
+
+        //when
+        expectThrows<DuplicateEmailException> { signUpUseCase.command(basicSignUpDto) }
 
         //then
         verify (exactly = 0){ memberRepository.save(any()) }
@@ -105,6 +126,7 @@ class SignUpUseCaseTest {
         every { memberRepository.findByOauth2LoginId(general) } returns null
         every { passwordEncoder.encode(basicSignUpDto.password) } returns encodedPw
         every { memberRepository.save(any()) } throws RuntimeException()
+        every { memberRepository.findByEmail(any()) } returns null
 
         //when
         expectThrows<RuntimeException> { signUpUseCase.command(basicSignUpDto) }

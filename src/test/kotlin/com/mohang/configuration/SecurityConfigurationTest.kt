@@ -3,7 +3,10 @@ package com.mohang.configuration
 import com.mohang.application.member.usecase.SignUpUseCase
 import com.mohang.configuration.security.SecurityConfiguration
 import com.mohang.domain.member.MemberPasswordEncoder
+import com.mohang.infrastructure.authentication.jsonlogin.filter.JsonAuthenticationProcessingFilter
+import com.mohang.infrastructure.authentication.jsonlogin.handler.JsonAuthenticationSuccessHandler
 import com.mohang.infrastructure.authentication.jsonlogin.provider.usecase.LoadMemberUseCase
+import com.mohang.infrastructure.authentication.oauth2.handler.OAuth2AuthenticationSuccessHandler
 import com.mohang.infrastructure.authentication.oauth2.userservice.usecase.OAuth2SignUpUseCase
 import com.ninjasquad.springmockk.MockkBean
 import org.junit.jupiter.api.Test
@@ -26,8 +29,9 @@ import strikt.assertions.isNotEqualTo
     SignUpUseCase::class,
     MemberPasswordEncoder::class,
     LoadMemberUseCase::class,
-    OAuth2SignUpUseCase::class
-
+    OAuth2SignUpUseCase::class,
+    OAuth2AuthenticationSuccessHandler::class,
+    JsonAuthenticationSuccessHandler::class,
 ])
 class SecurityConfigurationTest {
 

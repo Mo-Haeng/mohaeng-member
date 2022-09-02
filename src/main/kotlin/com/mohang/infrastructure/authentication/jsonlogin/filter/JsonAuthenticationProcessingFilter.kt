@@ -19,6 +19,7 @@ class JsonAuthenticationProcessingFilter(
     loginUri: String, // 로그인 진행할 uri
 
     private val objectMapper: ObjectMapper,
+
 ) : AbstractAuthenticationProcessingFilter(AntPathRequestMatcher(loginUri)) {   // 로그인 처리 하지 않을 url 설정
 
     companion object {

@@ -1,6 +1,6 @@
 package com.mohang.fixture
 
-import com.mohang.application.member.usecase.dto.BasicSignUpDto
+import com.mohang.application.member.usecase.dto.SignUpDto
 import com.mohang.domain.enums.OAuth2Type
 import com.mohang.domain.enums.Role
 import com.mohang.domain.member.Member
@@ -114,7 +114,7 @@ object MemberFixture {
         username: String = USERNAME,
 
         ) =
-        BasicSignUpDto(
+        SignUpDto(
             email = email,
             password = password,
             nickname = nickname,

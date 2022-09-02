@@ -34,7 +34,7 @@ internal class SignUpRestControllerTest {
     private lateinit var mockMvc: MockMvc
 
     @MockkBean
-    private lateinit var signUpUseCase: SignUpUseCase<SignUpDto>
+    private lateinit var signUpUseCase: SignUpUseCase
 
     companion object {
         private val mapper = ObjectMapper().registerModule(KotlinModule.Builder().build())
