@@ -36,8 +36,9 @@ internal class AuthTokenSenderTest {
         authTokenSender.sendByRedirectQueryString(response, redirectUrl, authToken)
 
         //then
-        expectThat(response.redirectedUrl)
-            .isEqualTo("${redirectUrl}?${AuthTokenSender.QUERY_PARAM_NAME}=${authToken.token}")
+        expectThat(response.redirectedUrl) {
+            isEqualTo("${redirectUrl}?${AuthTokenSender.QUERY_PARAM_NAME}=${authToken.token}")
+        }
     }
 
 
@@ -52,8 +53,10 @@ internal class AuthTokenSenderTest {
         authTokenSender.sendByHeader(response, authToken)
 
         //then
-        expectThat(response.getHeader(HEADER_NAME))
-            .isEqualTo(authToken.token)
+        expectThat(response.getHeader(HEADER_NAME)) {
+            isEqualTo(authToken.token)
+        }
+
     }
 
     @Test
@@ -67,11 +70,12 @@ internal class AuthTokenSenderTest {
         authTokenSender.sendByJson(response, authToken)
 
         //then
-        expectThat(response.contentAsString.trimIndent())
-            .isEqualTo("""
+        expectThat(response.contentAsString.trimIndent()) {
+            isEqualTo("""
                 {
                     "${AuthTokenSender.JSON_NAME}":"${authToken.token}"
                 }
             """.trimIndent())
+        }
     }
 }

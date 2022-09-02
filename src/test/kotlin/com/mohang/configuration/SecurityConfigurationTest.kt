@@ -45,7 +45,9 @@ class SecurityConfigurationTest {
             .andReturn()
 
         // 401(UNAUTHORIZED)이 아니어야 함
-        expectThat(result.response.status).isNotEqualTo(UNAUTHORIZED.value())
+        expectThat(result.response.status) {
+            isNotEqualTo(UNAUTHORIZED.value())
+        }
     }
 
     @Test
@@ -55,7 +57,9 @@ class SecurityConfigurationTest {
             .andReturn()
 
         // 401(UNAUTHORIZED)이 아니어야 함
-        expectThat(result.response.status).isNotEqualTo(UNAUTHORIZED.value())
+        expectThat(result.response.status) {
+            isNotEqualTo(UNAUTHORIZED.value())
+        }
     }
 
     @Test
@@ -65,13 +69,17 @@ class SecurityConfigurationTest {
             .andReturn()
 
         // 401(UNAUTHORIZED)이 아니어야 함
-        expectThat(getResult.response.status).isNotEqualTo(UNAUTHORIZED.value())
+        expectThat(getResult.response.status) {
+            isNotEqualTo(UNAUTHORIZED.value())
+        }
 
         val postResult = mockMvc.post("/h2-console")
             .andReturn()
 
         // 401(UNAUTHORIZED)이 아니어야 함
-        expectThat(postResult.response.status).isNotEqualTo(UNAUTHORIZED.value())
+        expectThat(postResult.response.status) {
+            isNotEqualTo(UNAUTHORIZED.value())
+        }
     }
 
     @Test
@@ -81,12 +89,16 @@ class SecurityConfigurationTest {
             .andReturn()
 
         // 401(UNAUTHORIZED)이 아니어야 함
-        expectThat(getResult.response.status).isNotEqualTo(UNAUTHORIZED.value())
+        expectThat(getResult.response.status) {
+            isNotEqualTo(UNAUTHORIZED.value())
+        }
 
         val postResult = mockMvc.post("/error")
             .andReturn()
 
         // 401(UNAUTHORIZED)이 아니어야 함
-        expectThat(postResult.response.status).isNotEqualTo(UNAUTHORIZED.value())
+        expectThat(postResult.response.status) {
+            isNotEqualTo(UNAUTHORIZED.value())
+        }
     }
 }

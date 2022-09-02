@@ -67,8 +67,9 @@ class SignUpUseCaseTest {
 
 
         //when
-        expectThat(signUpUseCase.command(basicSignUpDto))
-            .isEqualTo(savedMember.id)
+        expectThat(signUpUseCase.command(basicSignUpDto)) {
+            isEqualTo(savedMember.id)
+        }
 
         //then
         verify (exactly = 1){ memberRepository.findByOauth2LoginId(general) }

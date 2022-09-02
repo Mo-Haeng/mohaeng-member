@@ -30,10 +30,10 @@ internal class MemberDetailsTest {
         )
 
         //then
-        expectThat(memberDetails.id).isEqualTo(memberId)
-        expectThat(memberDetails.username).isEqualTo(username)
-        expectThat(memberDetails.password).isEqualTo(password)
-        expectThat(memberDetails.role).isEqualTo(role)
+        expectThat(memberDetails.id) { isEqualTo(memberId) }
+        expectThat(memberDetails.username) { isEqualTo(username) }
+        expectThat(memberDetails.password) { isEqualTo(password) }
+        expectThat(memberDetails.role) { isEqualTo(role) }
     }
 
     @Test
@@ -55,6 +55,6 @@ internal class MemberDetailsTest {
         memberDetails.eraseCredentials()
 
         //then
-        expectThat(memberDetails.password).isNull()
+        expectThat(memberDetails.password) { isNull() }
     }
 }

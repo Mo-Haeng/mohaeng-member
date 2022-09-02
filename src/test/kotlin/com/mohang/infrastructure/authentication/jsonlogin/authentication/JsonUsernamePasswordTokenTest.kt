@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isFalse
+import strikt.assertions.isNull
 import strikt.assertions.isTrue
 
 /**
@@ -26,8 +27,11 @@ internal class JsonUsernamePasswordTokenTest {
         //when
         expectThat(
             JsonUsernamePasswordToken(principal = username, credentials = password).isAuthenticated
-        ) //then
-            .isFalse()
+        ) {
+            //then
+            isFalse()
+        }
+
     }
 
     @Test
@@ -43,8 +47,10 @@ internal class JsonUsernamePasswordTokenTest {
         //when
         expectThat(
             JsonUsernamePasswordToken(principal = authMemberPrinciple, credentials = password, role = role).isAuthenticated
-        ) //then
-            .isTrue()
+        ) {
+            //then
+            isTrue()
+        }
     }
 
     @Test
@@ -60,8 +66,10 @@ internal class JsonUsernamePasswordTokenTest {
         //when
         expectThat(
             JsonUsernamePasswordToken(principal = authMemberPrinciple, credentials = password, role = role).principal
-        ) //then
-            .isEqualTo(authMemberPrinciple)
+        ) {
+            //then
+            isEqualTo(authMemberPrinciple)
+        }
     }
 
     @Test
@@ -77,8 +85,11 @@ internal class JsonUsernamePasswordTokenTest {
         //when
         expectThat(
             JsonUsernamePasswordToken(principal = authMemberPrinciple, credentials = password, role = role).credentials
-        ) //then
-            .isEqualTo(password)
+        ) {
+            //then
+            isEqualTo(password)
+        }
+
     }
 
     @Test
@@ -97,7 +108,9 @@ internal class JsonUsernamePasswordTokenTest {
         jupt.eraseCredentials()
 
         //when
-        expectThat(jupt.credentials) //then
-            .isEqualTo(null)
+        expectThat(jupt.credentials) {
+            //then
+            isNull()
+        }
     }
 }

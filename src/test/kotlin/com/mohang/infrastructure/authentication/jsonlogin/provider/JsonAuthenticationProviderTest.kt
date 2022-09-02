@@ -25,14 +25,12 @@ import strikt.assertions.message
  */
 internal class JsonAuthenticationProviderTest {
 
-
     private val encoder = mockkClass(MemberPasswordEncoder::class)
     private val loadMemberUseCase = mockkClass(LoadMemberUseCase::class)
 
     private val jsonAuthenticationProvider: JsonAuthenticationProvider by lazy {
         JsonAuthenticationProvider(encoder, loadMemberUseCase)
     }
-
 
     @Test
     fun `인증 성공시 AuthMemberPrinciple이 담긴 JsonUsernamePasswordToken 반환`() {
@@ -44,24 +42,32 @@ internal class JsonAuthenticationProviderTest {
         every { loadMemberUseCase.command(any()) } returns memberDetails
         every { encoder.matches(any(), any()) } returns true
 
-        val jupt = JsonUsernamePasswordToken(principal = member.oauth2LoginId.value, credentials = member.password, role = member.role)
+        val jupt = JsonUsernamePasswordToken(
+            principal = member.oauth2LoginId.value,
+            credentials = member.password,
+            role = member.role
+        )
 
         //when
         val authenticate = jsonAuthenticationProvider.authenticate(jupt)
 
         //then
-        expectThat(authenticate.javaClass.isAssignableFrom(JsonUsernamePasswordToken::class.java)).isTrue()
+        expectThat(authenticate.javaClass.isAssignableFrom(JsonUsernamePasswordToken::class.java)) {
+            isTrue()
+        }
 
         val returnedToken = authenticate as JsonUsernamePasswordToken
-        expectThat(returnedToken.principal.javaClass.isAssignableFrom(AuthMemberPrinciple::class.java)).isTrue()
+        expectThat(returnedToken.principal.javaClass.isAssignableFrom(AuthMemberPrinciple::class.java)) {
+            isTrue()
+        }
 
         val authMemberPrinciple = returnedToken.principal as AuthMemberPrinciple
 
         with(authMemberPrinciple) {
-            expectThat(id).isEqualTo(member.id)
-            expectThat(password).isEqualTo(null)
-            expectThat(oauth2LoginId).isEqualTo(member.oauth2LoginId)
-            expectThat(role).isEqualTo(member.role)
+            expectThat(id) { isEqualTo(member.id) }
+            expectThat(password) { isEqualTo(null) }
+            expectThat(oauth2LoginId) { isEqualTo(member.oauth2LoginId) }
+            expectThat(role) { isEqualTo(member.role) }
         }
     }
 
@@ -75,7 +81,11 @@ internal class JsonAuthenticationProviderTest {
         every { loadMemberUseCase.command(any()) } returns memberDetails
         every { encoder.matches(any(), any()) } returns false
 
-        val jupt = JsonUsernamePasswordToken(principal = member.oauth2LoginId.value, credentials = member.password, role = member.role)
+        val jupt = JsonUsernamePasswordToken(
+            principal = member.oauth2LoginId.value,
+            credentials = member.password,
+            role = member.role
+        )
 
         //when
         expectThrows<BadCredentialsException> { jsonAuthenticationProvider.authenticate(jupt) }
@@ -86,8 +96,8 @@ internal class JsonAuthenticationProviderTest {
     fun `JsonUsernamePasswordToken에 담긴 인증 정보 support true`() {
 
         with(jsonAuthenticationProvider) {
-            expectThat(supports(JsonUsernamePasswordToken::class.java)).isTrue()
-            expectThat(supports(UsernamePasswordAuthenticationToken::class.java)).isFalse()
+            expectThat(supports(JsonUsernamePasswordToken::class.java)) { isTrue() }
+            expectThat(supports(UsernamePasswordAuthenticationToken::class.java)) { isFalse() }
         }
     }
 }
