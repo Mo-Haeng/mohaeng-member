@@ -13,7 +13,9 @@ import javax.security.auth.message.AuthException
  */
 @Service
 class LoadMemberUseCase(
+
     private val memberRepository: MemberRepository,
+
 ) {
 
     fun command(oAuth2LoginId: OAuth2LoginId): MemberDetails {
