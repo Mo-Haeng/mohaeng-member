@@ -19,6 +19,7 @@ class JsonAuthenticationProvider(
     private val encoder: MemberPasswordEncoder,
 
     private val loadMemberUseCase: LoadMemberUseCase,
+
 ) : AuthenticationProvider {
 
     /**
