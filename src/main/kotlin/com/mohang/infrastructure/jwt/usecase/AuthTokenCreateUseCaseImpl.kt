@@ -22,8 +22,7 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 class AuthTokenCreateUseCaseImpl(
 
     jwtProperties: JwtProperties,
-
-    ) : AuthTokenCreateUseCase {
+) : AuthTokenCreateUseCase {
 
     // JWT 암호 알고리즘
     private val algorithm: Algorithm by lazy {
