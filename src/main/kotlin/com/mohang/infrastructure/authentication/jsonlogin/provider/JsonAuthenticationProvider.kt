@@ -40,7 +40,7 @@ class JsonAuthenticationProvider(
         // 비밀번호 일치 여부 검사
         checkPassword(password, memberDetails)
 
-        // principle 로 사용할 사용자 정보 생성
+        // principle 로 사용할 사용자 정보 생성 (비밀번호는 숨김)
         val authMember =
             AuthMemberPrinciple(id = memberDetails.id, oauth2LoginId = oAuth2LoginId, role = memberDetails.role)
 
