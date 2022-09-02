@@ -1,7 +1,6 @@
 package com.mohang.infrastructure.auth.oauth2.userservice.usecase
 
-import com.mohang.application.exception.DuplicateEmailException
-import com.mohang.application.exception.DuplicateUsernameException
+import com.mohang.application.member.exception.DuplicateEmailException
 import com.mohang.domain.member.Member
 import com.mohang.infrastructure.persistence.MemberRepository
 import mu.KotlinLogging

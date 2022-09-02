@@ -1,6 +1,6 @@
 package com.mohang.presentation.model
 
-import com.mohang.application.usecase.dto.BasicSignUpDto
+import com.mohang.application.member.usecase.dto.BasicSignUpDto
 import javax.validation.constraints.NotBlank
 
 /**

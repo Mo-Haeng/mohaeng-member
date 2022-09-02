@@ -1,4 +1,4 @@
-package com.mohang.application.exception
+package com.mohang.application.member.exception
 
 /**
  * Created by ShinD on 2022/08/30.

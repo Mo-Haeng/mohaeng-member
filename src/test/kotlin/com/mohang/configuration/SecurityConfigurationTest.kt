@@ -1,6 +1,6 @@
 package com.mohang.configuration
 
-import com.mohang.application.usecase.SignUpUseCase
+import com.mohang.application.member.usecase.SignUpUseCase
 import com.mohang.configuration.security.SecurityConfiguration
 import com.mohang.domain.member.MemberPasswordEncoder
 import com.mohang.infrastructure.auth.jsonlogin.provider.usecase.LoadMemberUseCase

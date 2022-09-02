@@ -1,7 +1,7 @@
 package com.mohang.presentation
 
-import com.mohang.application.usecase.SignUpUseCase
-import com.mohang.application.usecase.dto.SignUpDto
+import com.mohang.application.member.usecase.SignUpUseCase
+import com.mohang.application.member.usecase.dto.SignUpDto
 import com.mohang.presentation.model.SignUpRequest
 import mu.KotlinLogging
 import org.springframework.http.ResponseEntity

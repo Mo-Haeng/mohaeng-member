@@ -1,4 +1,4 @@
-package com.mohang.application.usecase.dto
+package com.mohang.application.member.usecase.dto
 
 import com.mohang.domain.enums.Role.BASIC
 import com.mohang.domain.enums.OAuth2Type.NONE

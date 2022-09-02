@@ -2,8 +2,8 @@ package com.mohang.presentation
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import com.mohang.application.usecase.SignUpUseCase
-import com.mohang.application.usecase.dto.SignUpDto
+import com.mohang.application.member.usecase.SignUpUseCase
+import com.mohang.application.member.usecase.dto.SignUpDto
 import com.mohang.fixture.MemberFixture.signUpRequest
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every

@@ -1,7 +1,8 @@
-package com.mohang.application.usecase
+package com.mohang.application.member.usecase
 
-import com.mohang.application.exception.DuplicateUsernameException
-import com.mohang.application.usecase.dto.SignUpDto
+import com.mohang.application.member.exception.DuplicateUsernameException
+import com.mohang.application.member.usecase.SignUpUseCase
+import com.mohang.application.member.usecase.dto.SignUpDto
 import com.mohang.domain.enums.OAuth2Type.NONE
 import com.mohang.domain.member.MemberPasswordEncoder
 import com.mohang.domain.member.OAuth2LoginId

@@ -1,8 +1,8 @@
-package com.mohang.application.usecase
+package com.mohang.application.member.usecase
 
-import com.mohang.application.exception.DuplicateEmailException
-import com.mohang.application.exception.DuplicateUsernameException
-import com.mohang.application.usecase.dto.SignUpDto
+import com.mohang.application.member.exception.DuplicateEmailException
+import com.mohang.application.member.exception.DuplicateUsernameException
+import com.mohang.application.member.usecase.dto.SignUpDto
 import com.mohang.domain.member.Member
 import com.mohang.domain.member.MemberPasswordEncoder
 import com.mohang.infrastructure.persistence.MemberRepository
