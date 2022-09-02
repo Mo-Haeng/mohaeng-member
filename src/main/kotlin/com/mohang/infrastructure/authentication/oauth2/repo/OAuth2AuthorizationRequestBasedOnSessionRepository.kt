@@ -21,8 +21,9 @@ class OAuth2AuthorizationRequestBasedOnSessionRepository :
     private val sessionAttrName = DEFAULT_AUTHORIZATION_REQUEST_ATTR_NAME
     private val redirectUrlParameterName = "redirect_url"
 
-
-
+    /**
+     * 사용되지 않는다
+     */
     override fun loadAuthorizationRequest(request: HttpServletRequest): OAuth2AuthorizationRequest? {
 
         val stateParameter = getStateParameter(request) ?: return null
@@ -31,10 +32,12 @@ class OAuth2AuthorizationRequestBasedOnSessionRepository :
         return authorizationRequests[stateParameter]
     }
 
-
-
-
-
+    /**
+     * oauth2 서비스에 요청을 보내기 전 정보를 저장한다.
+     *
+     * authorizationGrantType이 authorization_code인 경우 실행
+     * OAuth2AuthorizationRequestRedirectFilter.doFilterInternal() 내부의 sendRedirectForAuthorization()에서 실행
+     */
     override fun saveAuthorizationRequest(
         authorizationRequest: OAuth2AuthorizationRequest?,
         request: HttpServletRequest,
@@ -53,6 +56,10 @@ class OAuth2AuthorizationRequestBasedOnSessionRepository :
     }
 
 
+    /**
+     * oauth2 서비스에서 redirect 당했을 때 실행된다.
+     * 이전 saveAuthorizationRequest()에서 저장한 정보를 제거하면서 가져온다
+     */
     override fun removeAuthorizationRequest(
         request: HttpServletRequest,
         response: HttpServletResponse,
