@@ -66,6 +66,9 @@ dependencies {
 	// Logging
 	implementation("io.github.microutils:kotlin-logging:1.12.5")
 
+	// JWT
+	implementation("com.auth0:java-jwt:4.0.0")
+
 }
 
 dependencyManagement {

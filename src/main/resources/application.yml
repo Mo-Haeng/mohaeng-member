@@ -4,8 +4,10 @@ spring:
 
       local:
         - local-oauth2
+        - local-jwt
 
       prod:
         - prod-oauth2
+        - prod-jwt
 
     active: local

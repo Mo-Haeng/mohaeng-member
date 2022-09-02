@@ -1,6 +1,7 @@
 package com.mohang.configuration.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.mohang.application.jwt.usecase.AuthTokenCreateUseCase
 import com.mohang.configuration.security.enums.PermitAllURI
 import com.mohang.domain.enums.Role.BASIC
 import com.mohang.domain.member.MemberPasswordEncoder
@@ -105,8 +106,12 @@ class SecurityConfiguration {
      * OAuth2 로그인 성공 시 후처리
      */
     @Bean
-    fun oauth2AuthenticationSuccessHandler(): OAuth2AuthenticationSuccessHandler {
-        return OAuth2AuthenticationSuccessHandler()
+    fun oauth2AuthenticationSuccessHandler(
+        authTokenCreateUseCase: AuthTokenCreateUseCase? = null
+    ): OAuth2AuthenticationSuccessHandler {
+
+        checkNotNull(authTokenCreateUseCase) { "authTokenCreateUseCase is Null" }
+        return OAuth2AuthenticationSuccessHandler(authTokenCreateUseCase)
     }
 
     /**
@@ -152,5 +157,11 @@ class SecurityConfiguration {
      * Json으로 로그인 진행 시 사용자 인증정보 제공
      */
     @Bean
-    fun jsonAuthenticationSuccessHandler(): JsonAuthenticationSuccessHandler = JsonAuthenticationSuccessHandler()
+    fun jsonAuthenticationSuccessHandler(
+        authTokenCreateUseCase: AuthTokenCreateUseCase? = null
+    ): JsonAuthenticationSuccessHandler {
+
+        checkNotNull(authTokenCreateUseCase) { "authTokenCreateUseCase is Null" }
+        return JsonAuthenticationSuccessHandler(authTokenCreateUseCase)
+    }
 }

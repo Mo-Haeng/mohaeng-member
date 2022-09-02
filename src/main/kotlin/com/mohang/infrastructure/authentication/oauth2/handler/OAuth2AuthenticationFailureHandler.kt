@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletResponse
  */
 class OAuth2AuthenticationFailureHandler : AuthenticationFailureHandler {
 
-
-
     override fun onAuthenticationFailure(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -21,11 +19,13 @@ class OAuth2AuthenticationFailureHandler : AuthenticationFailureHandler {
     ) {
 
         var redirectUri = request.getSession(false).getAttribute(SESSION_REDIRECT_ATTR_NAME) as String
+
+        // 필수!!
         request.session.invalidate()
 
         redirectUri = UriComponentsBuilder.fromUriString(redirectUri)
             .queryParam("error", exception.localizedMessage)
-            .build().toUriString();
+            .build().toUriString()
 
         response.sendRedirect(redirectUri)
     }
