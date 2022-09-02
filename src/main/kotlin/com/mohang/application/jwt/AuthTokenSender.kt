@@ -15,6 +15,10 @@ class AuthTokenSender {
         const val HEADER_NAME = "authToken"
         const val JSON_NAME = "authToken"
     }
+
+    /**
+     * redirect + queryString으로 AuthToken 전달
+     */
     fun sendByRedirectQueryString(
         response: HttpServletResponse,
         redirectUrl: String,
@@ -28,10 +32,16 @@ class AuthTokenSender {
         response.sendRedirect(redirectUrlWithParam)
     }
 
+    /**
+     * Header에 JWT 담아서 전달
+     */
     fun sendByHeader(response: HttpServletResponse, authToken: AuthToken) {
         response.setHeader(HEADER_NAME, authToken.token)
     }
 
+    /**
+     * JSON에 JWT 담아서 전달
+     */
     fun sendByJson(response: HttpServletResponse, authToken: AuthToken) {
         response.contentType = APPLICATION_JSON_VALUE
         response.writer.println(
