@@ -23,7 +23,7 @@ class JsonAuthenticationProvider(
 ) : AuthenticationProvider {
 
     /**
-     * 인증 수행 -> 반환 결과가
+     * JsonUsernamePasswordToken에 담긴 username과 password를 사용하여 사용자 인증 정보(Authentication)를 반환
      */
     override fun authenticate(authentication: Authentication): Authentication {
 
@@ -41,7 +41,6 @@ class JsonAuthenticationProvider(
         checkPassword(password, memberDetails)
 
         // principle 로 사용할 사용자 정보 생성
-
         val authMember =
             AuthMemberPrinciple(id = memberDetails.id, oauth2LoginId = oAuth2LoginId, role = memberDetails.role)
 
