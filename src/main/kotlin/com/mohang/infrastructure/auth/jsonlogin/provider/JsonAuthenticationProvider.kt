@@ -4,9 +4,9 @@ import com.mohang.domain.enums.OAuth2Type.NONE
 import com.mohang.domain.member.MemberPasswordEncoder
 import com.mohang.domain.member.OAuth2LoginId
 import com.mohang.infrastructure.auth.jsonlogin.authentication.JsonUsernamePasswordToken
-import com.mohang.infrastructure.auth.jsonlogin.principle.AuthMember
 import com.mohang.infrastructure.auth.jsonlogin.provider.usecase.LoadMemberUseCase
 import com.mohang.infrastructure.auth.jsonlogin.userdetails.MemberDetails
+import com.mohang.infrastructure.auth.principle.AuthMemberPrinciple
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.core.Authentication
@@ -40,8 +40,9 @@ class JsonAuthenticationProvider(
         checkPassword(password, memberDetails)
 
         // principle 로 사용할 사용자 정보 생성
+
         val authMember =
-            AuthMember(id = memberDetails.id, username = memberDetails.username, role = memberDetails.role)
+            AuthMemberPrinciple(id = memberDetails.id, oauth2LoginId = oAuth2LoginId, role = memberDetails.role)
 
         // 인증정보 반환
         return JsonUsernamePasswordToken(authMember, memberDetails.password, authMember.role)
@@ -52,7 +53,7 @@ class JsonAuthenticationProvider(
      */
     private fun checkPassword(password: String, memberDetails: MemberDetails) {
         if (!encoder.matches(password, memberDetails.password))
-            throw BadCredentialsException("비밀번호가 잘못되었습니다");
+            throw BadCredentialsException("비밀번호가 잘못되었습니다")
     }
 
     /**

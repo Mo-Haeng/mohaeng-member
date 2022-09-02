@@ -1,6 +1,6 @@
 package com.mohang.infrastructure.auth.jsonlogin.handler
 
-import com.mohang.infrastructure.auth.jsonlogin.principle.AuthMember
+import com.mohang.infrastructure.auth.principle.AuthMemberPrinciple
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
 import javax.servlet.http.HttpServletRequest
@@ -18,12 +18,11 @@ class JsonAuthenticationSuccessHandler : AuthenticationSuccessHandler {
         authentication: Authentication,
 
         ) {
-        println(authentication)
-        println(authentication.principal)
-        val member = authentication.principal as AuthMember
-        println(member.id)
-        println(member.role)
-        println(member.username)
+        val principal = authentication.principal as AuthMemberPrinciple
+        println(principal.id)
+        println(principal.role)
+        println(principal.oauth2LoginId)
+        println(principal.password)
         //TODO("JWT 발급")
     }
 }

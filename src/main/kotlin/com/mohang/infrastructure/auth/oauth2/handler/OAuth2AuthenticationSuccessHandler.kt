@@ -1,12 +1,10 @@
 package com.mohang.infrastructure.auth.oauth2.handler
 
 import com.mohang.infrastructure.auth.oauth2.repo.OAuth2AuthorizationRequestBasedOnSessionRepository.Companion.SESSION_REDIRECT_ATTR_NAME
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
+import com.mohang.infrastructure.auth.principle.AuthMemberPrinciple
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
 import org.springframework.web.util.UriComponentsBuilder
-import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -24,10 +22,16 @@ class OAuth2AuthenticationSuccessHandler : AuthenticationSuccessHandler {
         var redirectUri = request.getSession(false).getAttribute(SESSION_REDIRECT_ATTR_NAME) as String
         request.session.invalidate()
 
+        val principal = authentication.principal as AuthMemberPrinciple
+        println(principal.id)
+        println(principal.role)
+        println(principal.oauth2LoginId)
+        println(principal.password)
+
 
         redirectUri = UriComponentsBuilder.fromUriString(redirectUri)
             .queryParam("accessToken", "AccessToken")
-            .build().toUriString();
+            .build().toUriString()
 
         response.sendRedirect(redirectUri)
     }
