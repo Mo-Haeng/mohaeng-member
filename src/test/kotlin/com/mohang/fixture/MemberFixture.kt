@@ -5,6 +5,7 @@ import com.mohang.domain.enums.OAuth2Type
 import com.mohang.domain.enums.Role
 import com.mohang.domain.member.Member
 import com.mohang.domain.member.OAuth2LoginId
+import com.mohang.infrastructure.authentication.jsonlogin.userdetails.MemberDetails
 import com.mohang.presentation.model.SignUpRequest
 import org.springframework.test.util.ReflectionTestUtils
 import java.time.LocalDateTime
@@ -140,6 +141,19 @@ object MemberFixture {
             password = password,
             nickname = nickname,
             profileImagePath = profileImagePath,
+        )
+
+    fun memberDetails(
+        id: Long = ID,
+        username: String = USERNAME,
+        password: String = PASSWORD,
+        role: Role = ROLE
+    ) =
+        MemberDetails(
+            id = id,
+            username = username,
+            password = password,
+            role = role
         )
 
 }
