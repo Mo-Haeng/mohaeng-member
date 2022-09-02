@@ -1,6 +1,6 @@
 package com.mohang.presentation.model
 
-import com.mohang.application.member.usecase.dto.BasicSignUpDto
+import com.mohang.application.member.usecase.dto.SignUpDto
 import javax.validation.constraints.NotBlank
 
 /**
@@ -21,11 +21,11 @@ data class SignUpRequest(
     val profileImagePath: String? = null,
 ) {
 
-    fun toServiceDto(): BasicSignUpDto {
+    fun toServiceDto(): SignUpDto {
 
         //profileImagePath가 null이 아닌 ""가 넘어온 경우 null로 변경하여 넘기기
         if (profileImagePath != null && profileImagePath.isBlank()) {
-            return BasicSignUpDto(
+            return SignUpDto(
                 email = email,
                 username = username,
                 name = name,
@@ -34,7 +34,7 @@ data class SignUpRequest(
                 profileImagePath = null
             )
         }
-        return BasicSignUpDto(
+        return SignUpDto(
             email = email,
             username = username,
             name = name,

@@ -14,7 +14,7 @@ import org.springframework.transaction.support.TransactionTemplate
  * Created by ShinD on 2022/08/30.
  */
 @Service
-class SignUpUseCase<in T : SignUpDto>(
+class SignUpUseCase(
 
     private val memberRepository: MemberRepository,
 
@@ -28,7 +28,7 @@ class SignUpUseCase<in T : SignUpDto>(
     /**
      * 회원 가입
      */
-    fun command(signUpDto: T): Long {
+    fun command(signUpDto: SignUpDto): Long {
 
         log.debug { "SignUpUseCase.command()" }
 
