@@ -1,29 +1,21 @@
-package com.mohang.infrastructure.authentication.oauth2.userservice.converter
+package com.mohang.infrastructure.authentication.oauth2.userservice.provider.converter
 
 import com.mohang.domain.enums.OAuth2Type
-import com.mohang.domain.enums.OAuth2Type.*
+import com.mohang.domain.enums.OAuth2Type.KAKAO
 import com.mohang.domain.enums.Role
 import com.mohang.domain.member.Member
 import com.mohang.domain.member.OAuth2LoginId
 
 /**
- * Created by ShinD on 2022/09/01.
+ * Created by ShinD on 2022/09/04.
  */
-class OAuth2AttributesToMemberConverter {
+class KakaoToMemberConverter : OAuth2AttributesToMemberConverter {
 
-    fun convert(oAuth2Type: OAuth2Type, attributes: Map<String, Any>): Member =
-        when (oAuth2Type) {
-            KAKAO -> convertKakao(attributes)
-            GOOGLE -> convertGoogle(attributes)
-            NAVER -> convertNaver(attributes)
-            else -> throw RuntimeException("등록되지 않은 OAuth2 서비스입니다.")
-        }
+    override fun support(oAuth2Type: OAuth2Type) =
+        KAKAO == oAuth2Type
 
-    /**
-     * 카카오 회원 정보를 Member 객체로 변환
-     */
-    private fun convertKakao(attributes: Map<String, Any>): Member {
 
+    override fun convert(attributes: Map<String, Any>): Member {
         val oAuth2LoginId = OAuth2LoginId(oauth2Type = KAKAO, value = attributes[KAKAO.oauth2IdName].toString())
 
         val kakaoAccountMap = getKakaoAccountMap(attributes)
@@ -37,8 +29,8 @@ class OAuth2AttributesToMemberConverter {
             role = Role.BASIC,
             oauth2LoginId = oAuth2LoginId,
             name = nickname,
-            email = email,
             nickname = nickname,
+            email = email,
             profileImagePath = profileImagePath
         )
     }
@@ -58,12 +50,4 @@ class OAuth2AttributesToMemberConverter {
     private fun getProfileImagePath(kakaoProfileMap: Map<*, *>) = kakaoProfileMap["profile_image_url"] as String
 
     private fun getNickname(kakaoProfileMap: Map<*, *>) = kakaoProfileMap["nickname"] as String
-
-    private fun convertGoogle(attributes: Map<String, Any>): Member {
-        TODO("Not yet implemented")
-    }
-
-    private fun convertNaver(attributes: Map<String, Any>): Member {
-        TODO("Not yet implemented")
-    }
 }

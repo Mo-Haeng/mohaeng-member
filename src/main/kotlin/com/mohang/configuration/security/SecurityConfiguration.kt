@@ -15,6 +15,10 @@ import com.mohang.infrastructure.authentication.oauth2.handler.OAuth2Authenticat
 import com.mohang.infrastructure.authentication.oauth2.handler.OAuth2AuthenticationSuccessHandler
 import com.mohang.infrastructure.authentication.oauth2.repo.OAuth2AuthorizationRequestBasedOnSessionRepository
 import com.mohang.infrastructure.authentication.oauth2.userservice.OAuth2SignUpLoginUserService
+import com.mohang.infrastructure.authentication.oauth2.userservice.provider.converter.GoogleToMemberConverter
+import com.mohang.infrastructure.authentication.oauth2.userservice.provider.converter.KakaoToMemberConverter
+import com.mohang.infrastructure.authentication.oauth2.userservice.provider.converter.NaverToMemberConverter
+import com.mohang.infrastructure.authentication.oauth2.userservice.provider.OAuth2AttributesToMemberConverterProvider
 import com.mohang.infrastructure.authentication.oauth2.userservice.usecase.OAuth2SignUpUseCase
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -106,10 +110,37 @@ class SecurityConfiguration {
     @Bean
     fun oauth2SignUpLoginUserService(
         oauth2SignUpUseCase: OAuth2SignUpUseCase? = null,
+        oauth2AttributesToMemberConverterProvider: OAuth2AttributesToMemberConverterProvider? = null,
     ): OAuth2SignUpLoginUserService {
 
         checkNotNull(oauth2SignUpUseCase) { "OAuth2SignUpUseCase is Null" }
-        return OAuth2SignUpLoginUserService(oauth2SignUpUseCase)
+        checkNotNull(oauth2AttributesToMemberConverterProvider) { "oauth2AttributesToMemberConverterProvider is Null" }
+
+        return OAuth2SignUpLoginUserService(
+            signUpUseCase = oauth2SignUpUseCase,
+            provider = oauth2AttributesToMemberConverterProvider,
+        )
+
+    }
+
+
+
+    /**
+     * OAuth2 서비스에서 받은 정보를 가지고 Member로 변환하는 Converter
+     * OAuth2SignUpLoginUserService에서 사용
+     *
+     * OAuth2 서비스가 증가하면 더 추가할 수 있음
+     */
+    @Bean
+    fun oauth2AttributesToMemberConverterProvider() : OAuth2AttributesToMemberConverterProvider {
+
+        val kakaoToMemberConverter = KakaoToMemberConverter()
+        val googleToMemberConverter = GoogleToMemberConverter()
+        val naverToMemberConverter = NaverToMemberConverter()
+
+        return OAuth2AttributesToMemberConverterProvider(
+            listOf(kakaoToMemberConverter, googleToMemberConverter, naverToMemberConverter)
+        )
     }
 
 
