@@ -5,7 +5,7 @@ package com.mohang.configuration.exception
  */
 data class ExceptionResponse(
 
-    private val code: Int,
+    val code: Int,
 
-    private val message: String,
+    val message: String,
 )

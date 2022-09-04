@@ -26,7 +26,7 @@ class SendErrorAuthenticationEntryPoint(
         authException: AuthenticationException,
     ) {
 
-        log.error { "인증 예외가 발생하였습니다.\n STACK TRACE = [${authException.stackTraceToString()}]" }
+        log.error { "인증 예외가 발생하였습니다.  MESSAGE = [${authException.message}] \n STACK TRACE = [${authException.stackTraceToString()}]" }
 
         val exceptionResponse = ExceptionResponse(code = 401, message = authException.message ?: "인증에 실패하였습니다.")
 

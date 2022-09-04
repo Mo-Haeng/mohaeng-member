@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.ProviderManager
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
 import org.springframework.security.config.http.SessionCreationPolicy.STATELESS
 import org.springframework.security.config.web.servlet.invoke
 import org.springframework.security.web.SecurityFilterChain
@@ -40,16 +41,19 @@ class SecurityConfiguration {
         http {
 
             //== URL 권한 정보 설정 ==//
-            authorizeRequests {
-                // set permit all uri
-                PermitAllURI.values().map { value ->
-                    when (value.method) {
-                        //method가 null인 경우 -> 모든 메서드에 대해 허용
-                        null -> authorize(pattern = value.uri, permitAll)
-                        else -> authorize(method = value.method, pattern = value.uri, permitAll)
-                    }
-                }
-            }
+
+//            authorizeRequests {
+//                // set permit all uri
+//                PermitAllURI.values().map { value ->
+//                    when (value.method) {
+//                        //method가 null인 경우 -> 모든 메서드에 대해 허용
+//                        null -> authorize(AntPathRequestMatcher(value.uri), permitAll)
+//                        else -> authorize(AntPathRequestMatcher(value.uri, value.method.name), permitAll)
+//                    }
+//                }
+//
+//                authorize(anyRequest, authenticated)
+//            }
 
             //== csrf 사용 X ==//
             csrf { disable() }
@@ -61,7 +65,7 @@ class SecurityConfiguration {
             sessionManagement { sessionCreationPolicy = STATELESS }
 
             // h2 사용할 수 있도록 설정
-            headers { frameOptions { sameOrigin } }
+            headers { frameOptions { sameOrigin = true } }
 
             // OAuth2 로그인 사용
             oauth2Login {
@@ -95,6 +99,16 @@ class SecurityConfiguration {
 
             addFilterBefore<UsernamePasswordAuthenticationFilter>(jsonAuthenticationProcessingFilter())
         }
+
+        http.authorizeHttpRequests()
+            .antMatchers(PermitAllURI.LOGIN.method, PermitAllURI.LOGIN.uri).permitAll()
+            .antMatchers(PermitAllURI.SIGN_UP.method, PermitAllURI.SIGN_UP.uri).permitAll()
+            .antMatchers(PermitAllURI.HEALTH_CHECK.method, PermitAllURI.HEALTH_CHECK.uri).permitAll()
+            .antMatchers(PermitAllURI.H2.method, PermitAllURI.H2.uri).permitAll()
+            .antMatchers(PermitAllURI.ERROR.method, PermitAllURI.ERROR.uri).permitAll()
+            .antMatchers(PermitAllURI.MAIN.method, PermitAllURI.MAIN.uri).permitAll()
+            .anyRequest().authenticated()
+
 
         return http.build()
     }
@@ -232,4 +246,15 @@ class SecurityConfiguration {
 
         return SendErrorAuthenticationEntryPoint(objectMapper)
     }
+
+    /**
+     * https://velog.io/@gkdud583/HttpSecurity-WebSecurity%EC%9D%98-%EC%B0%A8%EC%9D%B4
+     * WebSecurity - 인증,인가 모두 처리 X
+     * HttpSecurity - antMatchers에 있는 endpoint에 대한 '인증'을 무시한다.
+     */
+    @Bean
+    fun webSecurityCustomizer(): WebSecurityCustomizer
+            = WebSecurityCustomizer { it.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**") }
+
+
 }
