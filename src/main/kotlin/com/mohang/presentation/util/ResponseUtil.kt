@@ -2,6 +2,7 @@ package com.mohang.presentation.util
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import java.nio.charset.StandardCharsets.UTF_8
 import javax.servlet.http.HttpServletResponse
 
 /**
@@ -13,6 +14,7 @@ object ResponseUtil {
 
         response.status = httpStatus.value()
         response.contentType = MediaType.APPLICATION_JSON_VALUE
+        response.characterEncoding = UTF_8.name()
         response.writer.println(json)
         response.writer.flush()
     }

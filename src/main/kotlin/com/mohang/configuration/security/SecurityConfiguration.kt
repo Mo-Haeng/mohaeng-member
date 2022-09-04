@@ -7,6 +7,7 @@ import com.mohang.domain.member.MemberPasswordEncoder
 import com.mohang.infrastructure.authentication.exception.SendErrorAccessDeniedHandler
 import com.mohang.infrastructure.authentication.exception.SendErrorAuthenticationEntryPoint
 import com.mohang.infrastructure.authentication.jsonlogin.filter.JsonAuthenticationProcessingFilter
+import com.mohang.infrastructure.authentication.jsonlogin.handler.JsonAuthenticationFailureHandler
 import com.mohang.infrastructure.authentication.jsonlogin.handler.JsonAuthenticationSuccessHandler
 import com.mohang.infrastructure.authentication.jsonlogin.provider.JsonAuthenticationProvider
 import com.mohang.infrastructure.authentication.jsonlogin.provider.usecase.LoadMemberUseCase
@@ -26,8 +27,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
 import org.springframework.security.config.http.SessionCreationPolicy.STATELESS
 import org.springframework.security.config.web.servlet.invoke
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 
 /**
@@ -97,7 +98,7 @@ class SecurityConfiguration {
                 accessDeniedHandler = sendErrorAccessDeniedHandler()
             }
 
-            addFilterBefore<UsernamePasswordAuthenticationFilter>(jsonAuthenticationProcessingFilter())
+            addFilterBefore<OAuth2AuthorizationRequestRedirectFilter>(jsonAuthenticationProcessingFilter())
         }
 
         return http.build()
@@ -178,6 +179,7 @@ class SecurityConfiguration {
         objectMapper: ObjectMapper? = null,
         jsonAuthenticationProvider: JsonAuthenticationProvider? = null,
         jsonAuthenticationSuccessHandler: JsonAuthenticationSuccessHandler? = null,
+        jsonAuthenticationFailureHandler: JsonAuthenticationFailureHandler? = null,
     ): JsonAuthenticationProcessingFilter {
 
         checkNotNull(objectMapper) { "objectMapper is Null" }
@@ -187,7 +189,7 @@ class SecurityConfiguration {
         val filter = JsonAuthenticationProcessingFilter(loginUri = PermitAllURI.LOGIN.uri, objectMapper)
         filter.setAuthenticationManager(ProviderManager(jsonAuthenticationProvider))
         filter.setAuthenticationSuccessHandler(jsonAuthenticationSuccessHandler)
-        //filter.setAuthenticationFailureHandler()
+        filter.setAuthenticationFailureHandler(jsonAuthenticationFailureHandler)
 
         return filter
     }
@@ -206,7 +208,7 @@ class SecurityConfiguration {
 
 
     /**
-     * Json으로 로그인 진행 시 사용자 인증정보 제공
+     * Json으로 로그인 성공 시 처리
      */
     @Bean
     fun jsonAuthenticationSuccessHandler(
@@ -215,6 +217,19 @@ class SecurityConfiguration {
 
         checkNotNull(authTokenCreateUseCase) { "authTokenCreateUseCase is Null" }
         return JsonAuthenticationSuccessHandler(authTokenCreateUseCase)
+    }
+
+
+    /**
+     * Json으로 로그인 실패 시 처리
+     */
+    @Bean
+    fun jsonAuthenticationFailureHandler(
+        objectMapper: ObjectMapper? = null
+    ): JsonAuthenticationFailureHandler {
+
+        checkNotNull(objectMapper) { "objectMapper is Null" }
+        return JsonAuthenticationFailureHandler(objectMapper)
     }
 
     @Bean
