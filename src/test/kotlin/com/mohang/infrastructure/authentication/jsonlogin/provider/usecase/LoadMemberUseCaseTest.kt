@@ -8,6 +8,7 @@ import com.mohang.infrastructure.persistence.MemberRepository
 import io.mockk.every
 import io.mockk.mockkClass
 import org.junit.jupiter.api.Test
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import strikt.api.expectThat
 import strikt.api.expectThrows
 import strikt.assertions.isEqualTo
@@ -54,7 +55,7 @@ internal class LoadMemberUseCaseTest {
         every { memberRepository.findByOauth2LoginId(any()) } returns null
 
         //when
-        expectThrows<AuthException> {
+        expectThrows<UsernameNotFoundException> {
             loadMemberUseCase.command(oAuth2LoginId)
         }.message.isEqualTo("일치하는 회원이 없습니다.")
     }
