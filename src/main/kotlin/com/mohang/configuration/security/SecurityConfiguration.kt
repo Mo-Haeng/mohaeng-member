@@ -28,6 +28,7 @@ import org.springframework.security.config.http.SessionCreationPolicy.STATELESS
 import org.springframework.security.config.web.servlet.invoke
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 
 /**
  * Created by ShinD on 2022/08/31.
@@ -41,14 +42,13 @@ class SecurityConfiguration {
         http {
 
             //== URL 권한 정보 설정 ==//
-            // Kotlin DSL을 사용하면 antMatcher가 아닌 mvcMatcher를 사용, 따라서 h2-console 에서 오류가 발생함
             authorizeHttpRequests {
                 // set permit all uri
                 PermitAllURI.values().map { value ->
                     when (value.method) {
                         //method가 null인 경우 -> 모든 메서드에 대해 허용
-                        null -> authorize((value.uri), permitAll)
-                        else -> authorize(value.uri, value.method.name, permitAll)
+                        null -> authorize(AntPathRequestMatcher(value.uri), permitAll)
+                        else -> authorize(AntPathRequestMatcher(value.uri, value.method.name), permitAll)
                     }
                 }
 
