@@ -68,15 +68,18 @@ class OAuth2AuthorizationRequestBasedOnSessionRepository :
         val authorizationReqs = getAuthorizationRequests(request)
 
         // state에 해당하는 OAuth2AuthorizationRequest를 제거하면서 가져온다
-        return  authorizationReqs.remove(getStateParameter(request) ?: return null)
+        val originalRequest = authorizationReqs.remove(getStateParameter(request) ?: return null)
 
+        with(authorizationReqs) {
+            when {
+                isEmpty()                       -> request.session.removeAttribute(sessionAttrName)
+                authorizationReqs.size == 1     -> request.session.setAttribute(sessionAttrName, authorizationReqs.values.iterator().next())
+                else                            -> request.session.setAttribute(sessionAttrName, authorizationReqs)
+            }
+        }
+
+        return originalRequest
     }
-
-
-    private fun getStateParameter(request: HttpServletRequest): String? {
-        return request.getParameter(OAuth2ParameterNames.STATE)
-    }
-
 
 
     private fun getAuthorizationRequests(request: HttpServletRequest): MutableMap<String, OAuth2AuthorizationRequest> {
@@ -89,6 +92,11 @@ class OAuth2AuthorizationRequestBasedOnSessionRepository :
         val authorizationRequests: MutableMap<String, OAuth2AuthorizationRequest> = HashMap(1)
         authorizationRequests[sessionAttributeValue.state] = sessionAttributeValue
         return authorizationRequests
+    }
+
+
+    private fun getStateParameter(request: HttpServletRequest): String? {
+        return request.getParameter(OAuth2ParameterNames.STATE)
     }
 
 
