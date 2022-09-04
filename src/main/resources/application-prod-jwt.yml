@@ -1,0 +1,4 @@
+jwt:
+  secretKey: ${jwt.secretKey}
+  authTokenExpirationPeriodDay: ${jwt.authTokenExpirationPeriodDay}
+  refreshTokenExpirationPeriodDay: ${jwt.refreshTokenExpirationPeriodDay}

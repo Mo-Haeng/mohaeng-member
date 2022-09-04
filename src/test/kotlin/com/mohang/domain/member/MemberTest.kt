@@ -28,6 +28,8 @@ internal class MemberTest {
         member.passwordEncoding(encoder)
 
         //then
-        expectThat(member.password).isEqualTo(encodedPassword)
+        expectThat(member.password) {
+            isEqualTo(encodedPassword)
+        }
     }
 }

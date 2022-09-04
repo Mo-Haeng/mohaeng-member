@@ -14,4 +14,9 @@ enum class Role {
     ;
 
     val authority: String = "ROLE_${this.name}"
+
+    companion object {
+        fun isBlack(role: Role) =
+            role == BLACK
+    }
 }

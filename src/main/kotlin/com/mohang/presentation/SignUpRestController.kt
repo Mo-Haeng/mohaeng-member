@@ -1,7 +1,6 @@
 package com.mohang.presentation
 
-import com.mohang.application.usecase.SignUpUseCase
-import com.mohang.application.usecase.dto.SignUpDto
+import com.mohang.application.member.usecase.SignUpUseCase
 import com.mohang.presentation.model.SignUpRequest
 import mu.KotlinLogging
 import org.springframework.http.ResponseEntity
@@ -15,18 +14,18 @@ import javax.validation.Valid
  * Created by ShinD on 2022/08/30.
  */
 @RestController
-class SignUpRestController (
+class SignUpRestController(
 
-    var signUpUseCase: SignUpUseCase<SignUpDto>
+    var signUpUseCase: SignUpUseCase,
 
 ) {
 
-    private val log = KotlinLogging.logger {  }
+    private val log = KotlinLogging.logger { }
 
     @PostMapping("/api/member")
     fun signUp(
         @Valid @RequestBody signUpRequest: SignUpRequest,
-    ) : ResponseEntity<Unit> {
+    ): ResponseEntity<Unit> {
 
         log.debug { "SignUpRestController.signUp()" }
 

@@ -1,10 +1,11 @@
 package com.mohang.fixture
 
-import com.mohang.application.usecase.dto.BasicSignUpDto
+import com.mohang.application.member.usecase.dto.SignUpDto
+import com.mohang.domain.enums.OAuth2Type.NONE
 import com.mohang.domain.enums.Role
-import com.mohang.domain.enums.SocialLoginType
 import com.mohang.domain.member.Member
-import com.mohang.domain.member.SocialLoginId
+import com.mohang.domain.member.OAuth2LoginId
+import com.mohang.infrastructure.authentication.principle.AuthMemberPrinciple
 import com.mohang.presentation.model.SignUpRequest
 import org.springframework.test.util.ReflectionTestUtils
 import java.time.LocalDateTime
@@ -34,7 +35,7 @@ object MemberFixture {
 
 
     const val USERNAME = "sample username"
-    var SOCIAL_LOGIN_ID: SocialLoginId = SocialLoginId(socialLoginType = SocialLoginType.NONE, value = USERNAME)
+    var SOCIAL_LOGIN_ID: OAuth2LoginId = OAuth2LoginId(oauth2Type = NONE, value = USERNAME)
 
     const val KAKAO_ID = "222222"
     const val NAVER_ID = "111111"
@@ -53,7 +54,7 @@ object MemberFixture {
         name: String = NAME,
         point: Int = POINT,
         profileImagePath: String = PROFILE_IMAGE_PATH,
-        socialLoginId: SocialLoginId = SOCIAL_LOGIN_ID
+        socialLoginId: OAuth2LoginId = SOCIAL_LOGIN_ID
 
     ) =
         Member(
@@ -64,7 +65,7 @@ object MemberFixture {
             name = name,
             point = point,
             profileImagePath = profileImagePath,
-            socialLoginId = socialLoginId,
+            oauth2LoginId = socialLoginId,
         )
 
     /**
@@ -82,7 +83,7 @@ object MemberFixture {
         nickname: String = NICKNAME,
         point: Int = POINT,
         profileImagePath: String = PROFILE_IMAGE_PATH,
-        socialLoginId: SocialLoginId = SOCIAL_LOGIN_ID
+        socialLoginId: OAuth2LoginId = SOCIAL_LOGIN_ID
 
     ): Member {
         val member = Member(
@@ -93,7 +94,7 @@ object MemberFixture {
             name = name,
             point = point,
             profileImagePath = profileImagePath,
-            socialLoginId = socialLoginId,
+            oauth2LoginId = socialLoginId,
         )
 
         ReflectionTestUtils.setField(member, "id", id)
@@ -114,7 +115,7 @@ object MemberFixture {
         username: String = USERNAME,
 
         ) =
-        BasicSignUpDto(
+        SignUpDto(
             email = email,
             password = password,
             nickname = nickname,
@@ -142,4 +143,16 @@ object MemberFixture {
             profileImagePath = profileImagePath,
         )
 
+    fun authBasicMemberPrinciple(
+        id: Long = ID,
+        username: String = USERNAME,
+        password: String = PASSWORD,
+        role: Role = ROLE
+    ) =
+        AuthMemberPrinciple(
+            id = id,
+            oauth2LoginId  = OAuth2LoginId(NONE, username),
+            password = password,
+            role = role,
+        )
 }

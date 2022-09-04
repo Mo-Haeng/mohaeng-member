@@ -38,8 +38,8 @@ dependencies {
 
 	// Spring
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	//implementation("org.springframework.boot:spring-boot-starter-security")
-	//implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 
@@ -65,6 +65,9 @@ dependencies {
 
 	// Logging
 	implementation("io.github.microutils:kotlin-logging:1.12.5")
+
+	// JWT
+	implementation("com.auth0:java-jwt:4.0.0")
 
 }
 

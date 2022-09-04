@@ -17,16 +17,16 @@ class Member(
 
     // 회원가입 시 사용한 소셜 서비스와, 해당 서비스에서 제공하는 식별값
     @Embedded
-    var socialLoginId: SocialLoginId,
+    var oauth2LoginId: OAuth2LoginId,
 
     @Column(name = "name", length = 50, nullable = false)
     var name: String, // 이름
 
-    @Column(name = "email", length = 50, nullable = false)
-    var email: String, // 이메일
+    @Column(name = "email", length = 50, nullable = true, unique = true)
+    var email: String? = null, // 이메일
 
     @Column(nullable = true)
-    var password: String?, // 비밀번호(암호화), 소셜 로그인의 경우 존재 X
+    var password: String? = null, // 비밀번호(암호화), 소셜 로그인의 경우 존재 X
 
     @Column(nullable = false)
     var nickname: String, // 닉네임
@@ -35,7 +35,6 @@ class Member(
 
     @Column(nullable = true)
     var profileImagePath: String?, // 프로필 사진 경로 (https://~~)
-
 ) : BaseEntity() {
 
     /**
