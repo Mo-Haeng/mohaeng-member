@@ -1,7 +1,7 @@
 package com.mohang.infrastructure.authentication.jsonlogin.provider.usecase
 
 import com.mohang.domain.member.OAuth2LoginId
-import com.mohang.infrastructure.authentication.jsonlogin.userdetails.MemberDetails
+import com.mohang.infrastructure.authentication.principle.AuthMemberPrinciple
 import com.mohang.infrastructure.persistence.MemberRepository
 import org.springframework.stereotype.Service
 import javax.security.auth.message.AuthException
@@ -18,14 +18,14 @@ class LoadMemberUseCase(
 
 ) {
 
-    fun command(oAuth2LoginId: OAuth2LoginId): MemberDetails {
+    fun command(oAuth2LoginId: OAuth2LoginId): AuthMemberPrinciple {
         // 회원 정보가 존재하지 않는 경우 예외 발생
         val member = memberRepository.findByOauth2LoginId(oAuth2LoginId)
             ?: throw AuthException("일치하는 회원이 없습니다.")
 
-        return MemberDetails(
+        return AuthMemberPrinciple (
             id = member.id!!,
-            username = oAuth2LoginId.value,
+            oauth2LoginId = oAuth2LoginId,
             password = member.password!!,
             role = member.role
         )
