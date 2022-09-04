@@ -41,19 +41,19 @@ class SecurityConfiguration {
         http {
 
             //== URL 권한 정보 설정 ==//
+            // Kotlin DSL을 사용하면 antMatcher가 아닌 mvcMatcher를 사용, 따라서 h2-console 에서 오류가 발생함
+            authorizeHttpRequests {
+                // set permit all uri
+                PermitAllURI.values().map { value ->
+                    when (value.method) {
+                        //method가 null인 경우 -> 모든 메서드에 대해 허용
+                        null -> authorize((value.uri), permitAll)
+                        else -> authorize(value.uri, value.method.name, permitAll)
+                    }
+                }
 
-//            authorizeRequests {
-//                // set permit all uri
-//                PermitAllURI.values().map { value ->
-//                    when (value.method) {
-//                        //method가 null인 경우 -> 모든 메서드에 대해 허용
-//                        null -> authorize(AntPathRequestMatcher(value.uri), permitAll)
-//                        else -> authorize(AntPathRequestMatcher(value.uri, value.method.name), permitAll)
-//                    }
-//                }
-//
-//                authorize(anyRequest, authenticated)
-//            }
+                authorize(anyRequest, authenticated)
+            }
 
             //== csrf 사용 X ==//
             csrf { disable() }
@@ -99,16 +99,6 @@ class SecurityConfiguration {
 
             addFilterBefore<UsernamePasswordAuthenticationFilter>(jsonAuthenticationProcessingFilter())
         }
-
-        http.authorizeHttpRequests()
-            .antMatchers(PermitAllURI.LOGIN.method, PermitAllURI.LOGIN.uri).permitAll()
-            .antMatchers(PermitAllURI.SIGN_UP.method, PermitAllURI.SIGN_UP.uri).permitAll()
-            .antMatchers(PermitAllURI.HEALTH_CHECK.method, PermitAllURI.HEALTH_CHECK.uri).permitAll()
-            .antMatchers(PermitAllURI.H2.method, PermitAllURI.H2.uri).permitAll()
-            .antMatchers(PermitAllURI.ERROR.method, PermitAllURI.ERROR.uri).permitAll()
-            .antMatchers(PermitAllURI.MAIN.method, PermitAllURI.MAIN.uri).permitAll()
-            .anyRequest().authenticated()
-
 
         return http.build()
     }
