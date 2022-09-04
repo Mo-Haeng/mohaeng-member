@@ -28,10 +28,10 @@ class MemberRepositoryTest {
         val kakao = OAuth2LoginId(oauth2Type = KAKAO, value = "sample kakao Id")
         val naver = OAuth2LoginId(oauth2Type = NAVER, value = "sample id")
 
-        val generalMember = notSavedMember(socialLoginId = general)
-        val googleMember = notSavedMember(socialLoginId = google)
-        val kakaoMember = notSavedMember(socialLoginId = kakao)
-        val naverMember = notSavedMember(socialLoginId = naver)
+        val generalMember = notSavedMember(socialLoginId = general, email = "1")
+        val googleMember = notSavedMember(socialLoginId = google, email = "2")
+        val kakaoMember = notSavedMember(socialLoginId = kakao, email = "3")
+        val naverMember = notSavedMember(socialLoginId = naver, email = "4")
 
         memberRepository.saveAll(listOf(generalMember, googleMember, kakaoMember, naverMember))
 

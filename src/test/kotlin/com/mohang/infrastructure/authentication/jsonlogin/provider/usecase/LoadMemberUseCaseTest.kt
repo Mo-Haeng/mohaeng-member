@@ -38,10 +38,10 @@ internal class LoadMemberUseCaseTest {
 
         //when
         expectThat(
-            loadMemberUseCase.command(oAuth2LoginId)
+            loadMemberUseCase.command(oAuth2LoginId).id
         ) {
             //then
-            isEqualTo(authMemberPrinciple)
+            isEqualTo(authMemberPrinciple.id)
         }
     }
 
