@@ -2,8 +2,8 @@ package com.mohang.infrastructure.authentication.jsonlogin.provider.usecase
 
 import com.mohang.domain.enums.OAuth2Type.NONE
 import com.mohang.domain.member.OAuth2LoginId
+import com.mohang.fixture.MemberFixture
 import com.mohang.fixture.MemberFixture.savedMember
-import com.mohang.infrastructure.authentication.jsonlogin.userdetails.MemberDetails
 import com.mohang.infrastructure.persistence.MemberRepository
 import io.mockk.every
 import io.mockk.mockkClass
@@ -34,19 +34,14 @@ internal class LoadMemberUseCaseTest {
         val oAuth2LoginId = OAuth2LoginId(oauth2Type = NONE, value = username)
         every { memberRepository.findByOauth2LoginId(any()) } returns member
 
-        val memberDetails = MemberDetails(
-            id = member.id!!,
-            username = oAuth2LoginId.value,
-            password = member.password!!,
-            role = member.role
-        )
+        val authMemberPrinciple = MemberFixture.authBasicMemberPrinciple()
 
         //when
         expectThat(
             loadMemberUseCase.command(oAuth2LoginId)
         ) {
             //then
-            isEqualTo(memberDetails)
+            isEqualTo(authMemberPrinciple)
         }
     }
 

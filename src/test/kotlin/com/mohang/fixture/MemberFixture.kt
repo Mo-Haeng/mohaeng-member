@@ -1,11 +1,11 @@
 package com.mohang.fixture
 
 import com.mohang.application.member.usecase.dto.SignUpDto
-import com.mohang.domain.enums.OAuth2Type
+import com.mohang.domain.enums.OAuth2Type.NONE
 import com.mohang.domain.enums.Role
 import com.mohang.domain.member.Member
 import com.mohang.domain.member.OAuth2LoginId
-import com.mohang.infrastructure.authentication.jsonlogin.userdetails.MemberDetails
+import com.mohang.infrastructure.authentication.principle.AuthMemberPrinciple
 import com.mohang.presentation.model.SignUpRequest
 import org.springframework.test.util.ReflectionTestUtils
 import java.time.LocalDateTime
@@ -35,7 +35,7 @@ object MemberFixture {
 
 
     const val USERNAME = "sample username"
-    var SOCIAL_LOGIN_ID: OAuth2LoginId = OAuth2LoginId(oauth2Type = OAuth2Type.NONE, value = USERNAME)
+    var SOCIAL_LOGIN_ID: OAuth2LoginId = OAuth2LoginId(oauth2Type = NONE, value = USERNAME)
 
     const val KAKAO_ID = "222222"
     const val NAVER_ID = "111111"
@@ -143,17 +143,16 @@ object MemberFixture {
             profileImagePath = profileImagePath,
         )
 
-    fun memberDetails(
+    fun authBasicMemberPrinciple(
         id: Long = ID,
         username: String = USERNAME,
         password: String = PASSWORD,
         role: Role = ROLE
     ) =
-        MemberDetails(
+        AuthMemberPrinciple(
             id = id,
-            username = username,
+            oauth2LoginId  = OAuth2LoginId(NONE, username),
             password = password,
-            role = role
+            role = role,
         )
-
 }

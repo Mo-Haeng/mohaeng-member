@@ -1,12 +1,10 @@
 package com.mohang.infrastructure.authentication.jsonlogin.provider
 
 import com.mohang.domain.member.MemberPasswordEncoder
-import com.mohang.fixture.MemberFixture
-import com.mohang.fixture.MemberFixture.memberDetails
+import com.mohang.fixture.MemberFixture.authBasicMemberPrinciple
 import com.mohang.fixture.MemberFixture.savedMember
 import com.mohang.infrastructure.authentication.jsonlogin.authentication.JsonUsernamePasswordToken
 import com.mohang.infrastructure.authentication.jsonlogin.provider.usecase.LoadMemberUseCase
-import com.mohang.infrastructure.authentication.jsonlogin.userdetails.MemberDetails
 import com.mohang.infrastructure.authentication.principle.AuthMemberPrinciple
 import io.mockk.every
 import io.mockk.mockkClass
@@ -37,7 +35,7 @@ internal class JsonAuthenticationProviderTest {
 
         //given
         val member = savedMember()
-        val memberDetails = memberDetails()
+        val memberDetails = authBasicMemberPrinciple()
 
         every { loadMemberUseCase.command(any()) } returns memberDetails
         every { encoder.matches(any(), any()) } returns true
@@ -76,7 +74,7 @@ internal class JsonAuthenticationProviderTest {
 
         //given
         val member = savedMember()
-        val memberDetails = memberDetails()
+        val memberDetails = authBasicMemberPrinciple()
 
         every { loadMemberUseCase.command(any()) } returns memberDetails
         every { encoder.matches(any(), any()) } returns false
