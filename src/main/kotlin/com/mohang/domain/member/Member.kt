@@ -22,7 +22,7 @@ class Member(
     @Column(name = "name", length = 50, nullable = false)
     var name: String, // 이름
 
-    @Column(name = "email", length = 50, nullable = true)
+    @Column(name = "email", length = 50, nullable = true, unique = true)
     var email: String? = null, // 이메일
 
     @Column(nullable = true)
