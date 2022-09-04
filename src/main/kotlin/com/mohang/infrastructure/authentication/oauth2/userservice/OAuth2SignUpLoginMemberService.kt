@@ -6,21 +6,28 @@ import com.mohang.infrastructure.authentication.oauth2.userservice.usecase.OAuth
 import com.mohang.infrastructure.authentication.principle.AuthMemberPrinciple
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService
 import org.springframework.security.oauth2.core.user.OAuth2User
 
 /**
  * Created by ShinD on 2022/09/01.
  */
-class OAuth2SignUpLoginUserService(
+class OAuth2SignUpLoginMemberService(
 
     private val signUpUseCase: OAuth2SignUpUseCase,
 
     private val provider: OAuth2AttributesToMemberConverterProvider,
-) : DefaultOAuth2UserService() {
 
+    private val delegate: OAuth2UserService<OAuth2UserRequest, OAuth2User> = DefaultOAuth2UserService(),
+) : OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+
+    /**
+     * OAuth2 로그인 제공 서비스에 요청해서 사용자 정보 조회하여 반환해주는 메서드
+     */
     override fun loadUser(userRequest: OAuth2UserRequest): OAuth2User {
 
-        val oauth2User = super.loadUser(userRequest)
+        // DefaultOAuth2UserService 에게 위임
+        val oauth2User = delegate.loadUser(userRequest)
 
         // registrationId = kakao, google 등등
         val oauth2Type = OAuth2Type.fromRegistrationId(userRequest.clientRegistration.registrationId)

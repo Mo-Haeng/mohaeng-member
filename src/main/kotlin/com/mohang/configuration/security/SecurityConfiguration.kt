@@ -14,7 +14,7 @@ import com.mohang.infrastructure.authentication.jsonlogin.provider.usecase.LoadM
 import com.mohang.infrastructure.authentication.oauth2.handler.OAuth2AuthenticationFailureHandler
 import com.mohang.infrastructure.authentication.oauth2.handler.OAuth2AuthenticationSuccessHandler
 import com.mohang.infrastructure.authentication.oauth2.repo.OAuth2AuthorizationRequestBasedOnSessionRepository
-import com.mohang.infrastructure.authentication.oauth2.userservice.OAuth2SignUpLoginUserService
+import com.mohang.infrastructure.authentication.oauth2.userservice.OAuth2SignUpLoginMemberService
 import com.mohang.infrastructure.authentication.oauth2.userservice.provider.converter.GoogleToMemberConverter
 import com.mohang.infrastructure.authentication.oauth2.userservice.provider.converter.KakaoToMemberConverter
 import com.mohang.infrastructure.authentication.oauth2.userservice.provider.converter.NaverToMemberConverter
@@ -111,12 +111,12 @@ class SecurityConfiguration {
     fun oauth2SignUpLoginUserService(
         oauth2SignUpUseCase: OAuth2SignUpUseCase? = null,
         oauth2AttributesToMemberConverterProvider: OAuth2AttributesToMemberConverterProvider? = null,
-    ): OAuth2SignUpLoginUserService {
+    ): OAuth2SignUpLoginMemberService {
 
         checkNotNull(oauth2SignUpUseCase) { "OAuth2SignUpUseCase is Null" }
         checkNotNull(oauth2AttributesToMemberConverterProvider) { "oauth2AttributesToMemberConverterProvider is Null" }
 
-        return OAuth2SignUpLoginUserService(
+        return OAuth2SignUpLoginMemberService(
             signUpUseCase = oauth2SignUpUseCase,
             provider = oauth2AttributesToMemberConverterProvider,
         )
