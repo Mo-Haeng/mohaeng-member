@@ -2,8 +2,6 @@ package com.mohang.application.member.usecase
 
 import com.mohang.application.member.exception.DuplicateEmailException
 import com.mohang.application.member.exception.DuplicateUsernameException
-import com.mohang.application.member.usecase.SignUpUseCase
-import com.mohang.application.member.usecase.dto.SignUpDto
 import com.mohang.domain.enums.OAuth2Type.NONE
 import com.mohang.domain.member.MemberPasswordEncoder
 import com.mohang.domain.member.OAuth2LoginId
@@ -11,7 +9,7 @@ import com.mohang.fixture.MemberFixture.basicSignUpDto
 import com.mohang.fixture.MemberFixture.notSavedMember
 import com.mohang.fixture.MemberFixture.savedMember
 import com.mohang.infrastructure.persistence.MemberRepository
-import com.mohang.presentation.MockTransactionTemplate
+import com.mohang.mock.MockTransactionTemplate
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkClass
