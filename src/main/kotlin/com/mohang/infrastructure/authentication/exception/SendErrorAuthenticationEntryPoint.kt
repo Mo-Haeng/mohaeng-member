@@ -1,7 +1,10 @@
 package com.mohang.infrastructure.authentication.exception
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.mohang.configuration.exception.ExceptionResponse
+import com.mohang.presentation.util.ResponseUtil
+import mu.KotlinLogging
 import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
 import javax.servlet.http.HttpServletRequest
@@ -10,7 +13,12 @@ import javax.servlet.http.HttpServletResponse
 /**
  * Created by ShinD on 2022/09/03.
  */
-class SendErrorAuthenticationEntryPoint : AuthenticationEntryPoint {
+class SendErrorAuthenticationEntryPoint(
+
+    private val objectMapper: ObjectMapper,
+) : AuthenticationEntryPoint {
+
+    private val log = KotlinLogging.logger {  }
 
     override fun commence(
         request: HttpServletRequest,
@@ -18,10 +26,14 @@ class SendErrorAuthenticationEntryPoint : AuthenticationEntryPoint {
         authException: AuthenticationException,
     ) {
 
-        response.status = HttpStatus.UNAUTHORIZED.value()
-        response.contentType = MediaType.APPLICATION_JSON_VALUE
-        response.writer.println("${authException.message}")
-        TODO("not implement")
+        log.error { "인증 예외가 발생하였습니다.\n STACK TRACE = [${authException.stackTraceToString()}]" }
 
+        val exceptionResponse = ExceptionResponse(code = 401, message = authException.message ?: "인증에 실패하였습니다.")
+
+        ResponseUtil.sendError(
+            json = objectMapper.writeValueAsString(exceptionResponse),
+            response = response,
+            httpStatus = HttpStatus.UNAUTHORIZED
+        )
     }
 }

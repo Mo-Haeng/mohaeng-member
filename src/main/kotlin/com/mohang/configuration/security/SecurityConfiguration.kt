@@ -3,7 +3,6 @@ package com.mohang.configuration.security
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mohang.application.jwt.usecase.AuthTokenCreateUseCase
 import com.mohang.configuration.security.enums.PermitAllURI
-import com.mohang.domain.enums.Role.BASIC
 import com.mohang.domain.member.MemberPasswordEncoder
 import com.mohang.infrastructure.authentication.exception.SendErrorAccessDeniedHandler
 import com.mohang.infrastructure.authentication.exception.SendErrorAuthenticationEntryPoint
@@ -15,10 +14,10 @@ import com.mohang.infrastructure.authentication.oauth2.handler.OAuth2Authenticat
 import com.mohang.infrastructure.authentication.oauth2.handler.OAuth2AuthenticationSuccessHandler
 import com.mohang.infrastructure.authentication.oauth2.repo.OAuth2AuthorizationRequestBasedOnSessionRepository
 import com.mohang.infrastructure.authentication.oauth2.userservice.OAuth2SignUpLoginMemberService
+import com.mohang.infrastructure.authentication.oauth2.userservice.provider.OAuth2AttributesToMemberConverterProvider
 import com.mohang.infrastructure.authentication.oauth2.userservice.provider.converter.GoogleToMemberConverter
 import com.mohang.infrastructure.authentication.oauth2.userservice.provider.converter.KakaoToMemberConverter
 import com.mohang.infrastructure.authentication.oauth2.userservice.provider.converter.NaverToMemberConverter
-import com.mohang.infrastructure.authentication.oauth2.userservice.provider.OAuth2AttributesToMemberConverterProvider
 import com.mohang.infrastructure.authentication.oauth2.userservice.usecase.OAuth2SignUpUseCase
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -50,8 +49,6 @@ class SecurityConfiguration {
                         else -> authorize(method = value.method, pattern = value.uri, permitAll)
                     }
                 }
-                // 이외 모든 요청은 BASIC 이상이어야 함
-                authorize(anyRequest, hasRole(BASIC.name))
             }
 
             //== csrf 사용 X ==//
@@ -217,12 +214,22 @@ class SecurityConfiguration {
     }
 
     @Bean
-    fun sendErrorAccessDeniedHandler(): SendErrorAccessDeniedHandler {
-        return SendErrorAccessDeniedHandler()
+    fun sendErrorAccessDeniedHandler(
+        objectMapper: ObjectMapper? = null,
+    ): SendErrorAccessDeniedHandler {
+
+        checkNotNull(objectMapper) { "objectMapper is null" }
+
+        return SendErrorAccessDeniedHandler(objectMapper)
     }
 
     @Bean
-    fun sendErrorAuthenticationEntryPoint(): SendErrorAuthenticationEntryPoint {
-        return SendErrorAuthenticationEntryPoint()
+    fun sendErrorAuthenticationEntryPoint(
+        objectMapper: ObjectMapper? = null,
+    ): SendErrorAuthenticationEntryPoint {
+
+        checkNotNull(objectMapper) { "objectMapper is null" }
+
+        return SendErrorAuthenticationEntryPoint(objectMapper)
     }
 }

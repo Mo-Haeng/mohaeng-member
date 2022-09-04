@@ -1,7 +1,10 @@
 package com.mohang.infrastructure.authentication.exception
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.mohang.configuration.exception.ExceptionResponse
+import com.mohang.presentation.util.ResponseUtil
+import mu.KotlinLogging
 import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.web.access.AccessDeniedHandler
 import javax.servlet.http.HttpServletRequest
@@ -10,7 +13,12 @@ import javax.servlet.http.HttpServletResponse
 /**
  * Created by ShinD on 2022/09/03.
  */
-class SendErrorAccessDeniedHandler : AccessDeniedHandler {
+class SendErrorAccessDeniedHandler(
+
+    private val objectMapper: ObjectMapper
+) : AccessDeniedHandler {
+
+    private val log = KotlinLogging.logger {  }
 
     override fun handle(
         request: HttpServletRequest,
@@ -18,9 +26,13 @@ class SendErrorAccessDeniedHandler : AccessDeniedHandler {
         accessDeniedException: AccessDeniedException,
     ) {
 
-        response.status = HttpStatus.UNAUTHORIZED.value()
-        response.contentType = MediaType.APPLICATION_JSON_VALUE
-        response.writer.println("${accessDeniedException.message}")
-        TODO("not implement")
+        log.error { "인가 예외가 발생하였습니다.\n STACK TRACE = [${accessDeniedException.stackTraceToString()}]" }
+
+        val exceptionResponse = ExceptionResponse(code = 401, message = accessDeniedException.message ?: "접근 권한이 없거나, 예외가 발생하였습니다.")
+        ResponseUtil.sendError(
+            json = objectMapper.writeValueAsString(exceptionResponse),
+            response = response,
+            httpStatus = HttpStatus.FORBIDDEN
+        )
     }
 }
