@@ -53,7 +53,7 @@ class SignUpUseCaseTest {
         val username = "sample username"
         val encodedPw = "{encoded} pw"
         val general = OAuth2LoginId(oauth2Type = NONE, value = username)
-        val savedMember = savedMember(socialLoginId = general, password = encodedPw)
+        val savedMember = savedMember(oauth2LoginId = general, password = encodedPw)
 
         val basicSignUpDto = basicSignUpDto(username = username)
         every { memberRepository.findByOauth2LoginId(general) } returns null
