@@ -13,6 +13,9 @@ enum class PermitAllURI(val method: HttpMethod?, val uri: String) {
     // 회원가입 URI
     SIGN_UP(HttpMethod.POST, "/api/member"),
 
+    // 정보 조회
+    SEARCH(HttpMethod.GET, "/api/member/**"),
+
     // 헬스 체크 URI
     HEALTH_CHECK(HttpMethod.GET, "/health-check"),
 

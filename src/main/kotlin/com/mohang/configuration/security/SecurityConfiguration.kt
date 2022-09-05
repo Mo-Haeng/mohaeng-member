@@ -259,7 +259,7 @@ class SecurityConfiguration {
      */
     @Bean
     fun webSecurityCustomizer(): WebSecurityCustomizer
-            = WebSecurityCustomizer { it.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**") }
+            = WebSecurityCustomizer { it.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**", "/favicon.ico/**") }
 
 
 }
