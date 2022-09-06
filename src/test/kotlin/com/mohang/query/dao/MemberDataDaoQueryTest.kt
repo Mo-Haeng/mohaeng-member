@@ -134,8 +134,14 @@ internal class MemberDataDaoQueryTest {
     fun `찾는 회원이 없는 경우 조회 실패`() {
 
         //when
+        val notSavedMember =
+            notSavedMember(oauth2LoginId = OAuth2LoginId(
+                oauth2Type = OAuth2Type.KAKAO,
+                value = "1234"
+            ))
+        //when
         expectThrows<NotFountMemberException> {
-            memberDataDao.findById(1L)
+            memberDataDao.findById(99999L)
         }.message.isEqualTo(NotFountMemberException().message)
     }
 }

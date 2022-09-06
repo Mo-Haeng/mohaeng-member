@@ -37,6 +37,7 @@ class MemberDataDaoQuery(
             )
         )
             .from(member)
+            .where(member.id.eq(id))
             .fetchOne()
             ?: throw NotFountMemberException())
 
