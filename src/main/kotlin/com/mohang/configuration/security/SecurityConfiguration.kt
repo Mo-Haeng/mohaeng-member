@@ -258,6 +258,9 @@ class SecurityConfiguration {
         )
     }
 
+    /**
+     * JWT 에서 실제 인증 정보를 꺼내 인증을 수행하는 관리자
+     */
     @Bean
     fun jwtAuthenticationManager(
         extractAuthMemberFromAuthTokenUseCase: ExtractAuthMemberFromAuthTokenUseCase
@@ -268,6 +271,9 @@ class SecurityConfiguration {
     }
 
 
+    /**
+     * JWT 인증 실패 시 처리
+     */
     @Bean
     fun jwtAuthenticationFailureHandler(
         objectMapper: ObjectMapper? = null
