@@ -26,7 +26,7 @@ class SendErrorAccessDeniedHandler(
         accessDeniedException: AccessDeniedException,
     ) {
 
-        log.error { "인가 예외가 발생하였습니다. MESSAGE = [${accessDeniedException.message}]\n STACK TRACE = [${accessDeniedException.stackTraceToString()}]" }
+        log.error { "인가 예외가 발생하였습니다.  MESSAGE = [${accessDeniedException.message}] " }
 
         val exceptionResponse = ExceptionResponse(code = 401, message = accessDeniedException.message ?: "접근 권한이 없거나, 예외가 발생하였습니다.")
         ResponseUtil.sendError(

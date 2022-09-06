@@ -2,6 +2,7 @@ package com.mohang.configuration.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mohang.application.jwt.usecase.AuthTokenCreateUseCase
+import com.mohang.application.jwt.usecase.ExtractAuthMemberFromAuthTokenUseCase
 import com.mohang.configuration.security.enums.PermitAllURI
 import com.mohang.domain.member.MemberPasswordEncoder
 import com.mohang.infrastructure.authentication.exception.SendErrorAccessDeniedHandler
@@ -11,6 +12,9 @@ import com.mohang.infrastructure.authentication.jsonlogin.handler.JsonAuthentica
 import com.mohang.infrastructure.authentication.jsonlogin.handler.JsonAuthenticationSuccessHandler
 import com.mohang.infrastructure.authentication.jsonlogin.provider.JsonAuthenticationProvider
 import com.mohang.infrastructure.authentication.jsonlogin.provider.usecase.LoadMemberUseCase
+import com.mohang.infrastructure.authentication.jwt.filter.JwtAuthenticationProcessingFilter
+import com.mohang.infrastructure.authentication.jwt.handler.JwtAuthenticationFailureHandler
+import com.mohang.infrastructure.authentication.jwt.manager.JwtAuthenticationManager
 import com.mohang.infrastructure.authentication.oauth2.handler.OAuth2AuthenticationFailureHandler
 import com.mohang.infrastructure.authentication.oauth2.handler.OAuth2AuthenticationSuccessHandler
 import com.mohang.infrastructure.authentication.oauth2.repo.OAuth2AuthorizationRequestBasedOnSessionRepository
@@ -99,6 +103,7 @@ class SecurityConfiguration {
             }
 
             addFilterBefore<OAuth2AuthorizationRequestRedirectFilter>(jsonAuthenticationProcessingFilter())
+            addFilterBefore<JsonAuthenticationProcessingFilter>(jwtAuthenticationProcessingFilter())
         }
 
         return http.build()
@@ -232,6 +237,53 @@ class SecurityConfiguration {
         return JsonAuthenticationFailureHandler(objectMapper)
     }
 
+
+
+    /**
+     * JWT로 인증 진행하는 필터
+     */
+    @Bean
+    fun jwtAuthenticationProcessingFilter(
+        jwtAuthenticationManager: JwtAuthenticationManager? = null,
+        jwtAuthenticationFailureHandler: JwtAuthenticationFailureHandler? = null,
+    ): JwtAuthenticationProcessingFilter {
+
+        checkNotNull(jwtAuthenticationManager) { "jwtAuthenticationManager is null" }
+        checkNotNull(jwtAuthenticationFailureHandler) { "jwtAuthenticationFailureHandler is null" }
+
+        return JwtAuthenticationProcessingFilter(
+            PermitAllURI.permitAllMap(),
+            jwtAuthenticationManager,
+            jwtAuthenticationFailureHandler,
+        )
+    }
+
+    @Bean
+    fun jwtAuthenticationManager(
+        extractAuthMemberFromAuthTokenUseCase: ExtractAuthMemberFromAuthTokenUseCase
+    ): JwtAuthenticationManager {
+
+        checkNotNull(extractAuthMemberFromAuthTokenUseCase) { "extractAuthMemberFromAuthTokenUseCase is Null" }
+        return JwtAuthenticationManager(extractAuthMemberFromAuthTokenUseCase)
+    }
+
+
+    @Bean
+    fun jwtAuthenticationFailureHandler(
+        objectMapper: ObjectMapper? = null
+    ): JwtAuthenticationFailureHandler {
+
+        checkNotNull(objectMapper) { "objectMapper is Null" }
+        return JwtAuthenticationFailureHandler(objectMapper)
+    }
+
+
+
+
+
+    /**
+     * 인증 실패 시 처리
+     */
     @Bean
     fun sendErrorAccessDeniedHandler(
         objectMapper: ObjectMapper? = null,
@@ -242,6 +294,9 @@ class SecurityConfiguration {
         return SendErrorAccessDeniedHandler(objectMapper)
     }
 
+    /**
+     * 인가 실패 시 처리
+     */
     @Bean
     fun sendErrorAuthenticationEntryPoint(
         objectMapper: ObjectMapper? = null,

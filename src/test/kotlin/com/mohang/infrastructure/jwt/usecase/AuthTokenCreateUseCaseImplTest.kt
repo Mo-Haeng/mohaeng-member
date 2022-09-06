@@ -2,8 +2,9 @@ package com.mohang.infrastructure.jwt.usecase
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.mohang.application.jwt.usecase.AuthTokenCreateUseCase.Companion.MEMBER_ID_CLAIM
-import com.mohang.application.jwt.usecase.AuthTokenCreateUseCase.Companion.MEMBER_ROLE_CLAIM
+import com.mohang.configuration.jwt.JwtConfiguration.Companion.MEMBER_ID_CLAIM
+import com.mohang.configuration.jwt.JwtConfiguration.Companion.MEMBER_ROLE_CLAIM
+
 import com.mohang.domain.enums.OAuth2Type
 import com.mohang.domain.enums.Role
 import com.mohang.domain.member.OAuth2LoginId

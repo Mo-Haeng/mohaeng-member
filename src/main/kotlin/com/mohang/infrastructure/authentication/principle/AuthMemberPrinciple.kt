@@ -16,7 +16,7 @@ class AuthMemberPrinciple (
 
     private val password: String? = null,
 
-    val oauth2LoginId: OAuth2LoginId,
+    val oauth2LoginId: OAuth2LoginId? = null,
 
     val role: Role,
 
@@ -39,7 +39,7 @@ class AuthMemberPrinciple (
 
 
     // UserDetails
-    override fun getUsername() = oauth2LoginId.value
+    override fun getUsername() = oauth2LoginId?.value
 
 
     // UserDetails

@@ -29,4 +29,10 @@ enum class PermitAllURI(val method: HttpMethod?, val uri: String) {
     MAIN(null, "/"),
 
     ;
+
+    companion object {
+        fun permitAllMap(): Map<HttpMethod?, List<PermitAllURI>> {
+            return values().groupBy { it.method }
+        }
+    }
 }

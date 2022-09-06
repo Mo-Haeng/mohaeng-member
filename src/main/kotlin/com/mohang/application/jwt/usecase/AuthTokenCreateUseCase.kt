@@ -10,12 +10,5 @@ import com.mohang.infrastructure.authentication.principle.AuthMemberPrinciple
  */
 interface AuthTokenCreateUseCase {
 
-    companion object {
-
-        const val AUTH_TOKEN_SUBJECT = "AuthToken"
-        const val MEMBER_ID_CLAIM = "memberId"
-        const val MEMBER_ROLE_CLAIM = "memberRole"
-    }
-
     fun command(authPrinciple: AuthMemberPrinciple): AuthToken
 }

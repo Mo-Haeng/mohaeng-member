@@ -8,6 +8,7 @@ import com.mohang.infrastructure.authentication.jsonlogin.handler.JsonAuthentica
 import com.mohang.infrastructure.authentication.jsonlogin.provider.usecase.LoadMemberUseCase
 import com.mohang.infrastructure.authentication.oauth2.handler.OAuth2AuthenticationSuccessHandler
 import com.mohang.infrastructure.authentication.oauth2.userservice.usecase.OAuth2SignUpUseCase
+import com.mohang.presentation.RetrieveMemberRestController
 import com.ninjasquad.springmockk.MockkBean
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,6 +33,7 @@ import strikt.assertions.isNotEqualTo
     OAuth2SignUpUseCase::class,
     OAuth2AuthenticationSuccessHandler::class,
     JsonAuthenticationSuccessHandler::class,
+    RetrieveMemberRestController::class,
 ])
 class SecurityConfigurationTest {
 
