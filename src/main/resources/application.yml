@@ -5,9 +5,12 @@ spring:
       local:
         - local-oauth2
         - local-jwt
-
+        - console-logging
+        - file-logging
+        - error-logging
       prod:
         - prod-oauth2
         - prod-jwt
-
+        - file-logging
+        - error-logging
     active: local

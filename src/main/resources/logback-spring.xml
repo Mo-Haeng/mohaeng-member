@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 60초마다 설정 파일의 변경을 확인 하여 변경시 갱신 -->
+<!--https://logback.qos.ch/manual/index.html-->
+<configuration scan="true" scanPeriod="60 seconds">
+
+    <!--<conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />.-->
+
+
+    <!-- 파일 패턴 정의 [Define File Pattern]   -->
+    <property name="FILE_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level  ${PID} --- [%15.15t] %-40.40logger{39}: %m%n"/>
+
+
+
+
+    <!-- profile 별 설정  -->
+    <springProfile name="local">
+        <property name="LOG_PATH" value="logs/local"/>
+        <property name="LOG_FILE_NAME" value="local_log"/>
+        <property name="ERR_LOG_FILE_NAME" value="local_error_log"/>
+        <property name="ERR_LOG_PATH" value="logs/local/error"/>
+    </springProfile>
+
+
+
+    <springProfile name="prod">
+        <property name="LOG_PATH" value="logs/prod"/>
+        <property name="LOG_FILE_NAME" value="prod_log"/>
+        <property name="ERR_LOG_FILE_NAME" value="prod_error_log"/>
+        <property name="ERR_LOG_PATH" value="logs/prod/error"/>
+    </springProfile>
+
+
+
+
+
+    <!-- console log 설정 -->
+    <!-- https://rutgo-letsgo.tistory.com/118 참고 -->
+    <springProfile name="console-logging">
+        <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+        <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    </springProfile>
+
+
+
+
+    <!-- error log 설정 -->
+    <springProfile name="error-logging">
+        <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                <level>error</level>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>DENY</onMismatch>
+            </filter>
+            <file>${LOG_PATH}/${ERR_LOG_FILE_NAME}.log</file>
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <pattern>${FILE_PATTERN}</pattern>
+            </encoder>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${ERR_LOG_PATH}/${ERR_LOG_FILE_NAME}.%d{yyyy-MM-dd}_%i.zip</fileNamePattern>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>100MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+                <maxHistory>60</maxHistory>
+            </rollingPolicy>
+        </appender>
+    </springProfile>
+
+
+
+
+    <!-- file log 설정 -->
+    <springProfile name="file-logging">
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                <level>info</level>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>NEUTRAL</onMismatch>
+            </filter>
+            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                <level>warn</level>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>DENY</onMismatch>
+            </filter>
+            <file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <pattern>${FILE_PATTERN}</pattern>
+            </encoder>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}_%i.zip</fileNamePattern>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>100MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+                <maxHistory>60</maxHistory>
+            </rollingPolicy>
+        </appender>
+    </springProfile>
+
+
+
+    <!-- profile 별 log 설정 -->
+    <root>
+        <springProfile name="console-logging">
+            <appender-ref ref="CONSOLE"/>
+        </springProfile>
+        <springProfile name="file-logging">
+            <appender-ref ref="FILE"/>
+        </springProfile>
+        <springProfile name="error-logging">
+            <appender-ref ref="ERROR"/>
+        </springProfile>
+    </root>
+
+
+</configuration>
+
+
+<!--https://frozenpond.tistory.com/87?category=1175501 -->
+<!--https://goddaehee.tistory.com/206 -->
+<!--https://luvstudy.tistory.com/133  -->
+<!--https://yjh5369.tistory.com/entry/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8-Spring-Boot-%EB%A1%9C%EA%B7%B8-%EC%84%A4%EC%A0%95-Logback  -->
+<!--https://loosie.tistory.com/829  -->
+<!--https://rutgo-letsgo.tistory.com/118 -->
+
+
+
+<!-- 로그별 한 파일에 두고 설정 https://rutgo-letsgo.tistory.com/118 참고 -->
+<!--Logback - 7. Filters https://ckddn9496.tistory.com/89 -->
+<!--Logback 홈페이지 https://logback.qos.ch/manual/filters.html -->
