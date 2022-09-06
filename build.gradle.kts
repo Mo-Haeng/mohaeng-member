@@ -6,6 +6,9 @@ plugins {
 	kotlin("jvm") version "1.6.21"
 	kotlin("plugin.spring") version "1.6.21"
 	kotlin("plugin.jpa") version "1.6.21"
+
+	// QUERY DSL
+	kotlin("kapt") version "1.7.10"
 }
 
 group = "com.mohang"
@@ -69,6 +72,11 @@ dependencies {
 	// JWT
 	implementation("com.auth0:java-jwt:4.0.0")
 
+
+	// QUERY DSL
+	val querydslVersion = "5.0.0" //querydsl
+	implementation("com.querydsl:querydsl-jpa:$querydslVersion")
+	kapt("com.querydsl:querydsl-apt:$querydslVersion:jpa")
 }
 
 dependencyManagement {

@@ -4,9 +4,9 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.algorithms.Algorithm.HMAC512
 import com.mohang.application.jwt.usecase.AuthTokenCreateUseCase
-import com.mohang.application.jwt.usecase.AuthTokenCreateUseCase.Companion.AUTH_TOKEN_SUBJECT
-import com.mohang.application.jwt.usecase.AuthTokenCreateUseCase.Companion.MEMBER_ID_CLAIM
-import com.mohang.application.jwt.usecase.AuthTokenCreateUseCase.Companion.MEMBER_ROLE_CLAIM
+import com.mohang.configuration.jwt.JwtConfiguration.Companion.AUTH_TOKEN_SUBJECT
+import com.mohang.configuration.jwt.JwtConfiguration.Companion.MEMBER_ID_CLAIM
+import com.mohang.configuration.jwt.JwtConfiguration.Companion.MEMBER_ROLE_CLAIM
 import com.mohang.domain.jwt.AuthToken
 import com.mohang.infrastructure.authentication.principle.AuthMemberPrinciple
 import com.mohang.infrastructure.jwt.usecase.properties.JwtProperties

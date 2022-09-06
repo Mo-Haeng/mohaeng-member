@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 @RestControllerAdvice
 class ExceptionControllerAdvice {
 
-    private val log = KotlinLogging.logger {  }
+    private val log = KotlinLogging.logger { }
 
 
     @ExceptionHandler(BindException::class, HttpMessageNotReadableException::class)
@@ -27,6 +27,9 @@ class ExceptionControllerAdvice {
             .status(HttpStatus.BAD_REQUEST)
             .body(ExceptionResponse(code = 400, message = "Json 혹은 요청 파라미터의 형식이 올바르지 않습니다."))
     }
+
+
+
     @ExceptionHandler(RuntimeException::class)
     fun handleException(ex: RuntimeException): ResponseEntity<ExceptionResponse> {
 
@@ -48,5 +51,4 @@ class ExceptionControllerAdvice {
             .status(500)
             .body(ExceptionResponse(code = 500, message = ex.message ?: "예측하지 못한 예외가 발생하였습니다."))
     }
-
 }

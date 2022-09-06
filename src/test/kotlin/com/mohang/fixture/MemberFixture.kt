@@ -7,6 +7,7 @@ import com.mohang.domain.member.Member
 import com.mohang.domain.member.OAuth2LoginId
 import com.mohang.infrastructure.authentication.principle.AuthMemberPrinciple
 import com.mohang.presentation.model.SignUpRequest
+import com.mohang.query.data.MemberData
 import org.springframework.test.util.ReflectionTestUtils
 import java.time.LocalDateTime
 
@@ -35,7 +36,7 @@ object MemberFixture {
 
 
     const val USERNAME = "sample username"
-    var SOCIAL_LOGIN_ID: OAuth2LoginId = OAuth2LoginId(oauth2Type = NONE, value = USERNAME)
+    var OAUTH2_LOGIN_ID: OAuth2LoginId = OAuth2LoginId(oauth2Type = NONE, value = USERNAME)
 
     const val KAKAO_ID = "222222"
     const val NAVER_ID = "111111"
@@ -54,7 +55,7 @@ object MemberFixture {
         name: String = NAME,
         point: Int = POINT,
         profileImagePath: String = PROFILE_IMAGE_PATH,
-        socialLoginId: OAuth2LoginId = SOCIAL_LOGIN_ID
+        oauth2LoginId: OAuth2LoginId = OAUTH2_LOGIN_ID
 
     ) =
         Member(
@@ -65,7 +66,7 @@ object MemberFixture {
             name = name,
             point = point,
             profileImagePath = profileImagePath,
-            oauth2LoginId = socialLoginId,
+            oauth2LoginId = oauth2LoginId,
         )
 
     /**
@@ -83,7 +84,7 @@ object MemberFixture {
         nickname: String = NICKNAME,
         point: Int = POINT,
         profileImagePath: String = PROFILE_IMAGE_PATH,
-        socialLoginId: OAuth2LoginId = SOCIAL_LOGIN_ID
+        oauth2LoginId: OAuth2LoginId = OAUTH2_LOGIN_ID
 
     ): Member {
         val member = Member(
@@ -94,7 +95,7 @@ object MemberFixture {
             name = name,
             point = point,
             profileImagePath = profileImagePath,
-            oauth2LoginId = socialLoginId,
+            oauth2LoginId = oauth2LoginId,
         )
 
         ReflectionTestUtils.setField(member, "id", id)
@@ -155,4 +156,35 @@ object MemberFixture {
             password = password,
             role = role,
         )
+
+    fun memberData(
+
+        id: Long = ID,
+        createdAt: LocalDateTime = CREATED_AT,
+        modifiedAt: LocalDateTime = MODIFIED_AT,
+        username: String? = USERNAME,
+        role: Role = ROLE,
+        email: String = EMAIL,
+        password: String = PASSWORD,
+        name: String = NAME,
+        nickname: String = NICKNAME,
+        point: Int = POINT,
+        profileImagePath: String = PROFILE_IMAGE_PATH,
+        oauth2LoginId: OAuth2LoginId = OAUTH2_LOGIN_ID
+
+    ): MemberData {
+        return MemberData(
+            id = id,
+            role = role,
+            oauth2Type = oauth2LoginId.oauth2Type,
+            username = username,
+            name = name,
+            nickname = nickname,
+            email = email,
+            profileImagePath = profileImagePath,
+            point = point,
+            createdAt = CREATED_AT.toString(),
+            modifiedAt = MODIFIED_AT.toString(),
+        )
+    }
 }
