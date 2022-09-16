@@ -11,7 +11,7 @@ plugins {
 	kotlin("kapt") version "1.7.10"
 }
 
-group = "com.mohang"
+group = "com.mohaeng"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
